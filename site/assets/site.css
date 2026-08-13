@@ -37,7 +37,9 @@ h1 .accent{color:var(--blue)}
 .hero-sub{max-width:60ch;margin:26px auto 0;color:var(--gray);font-size:18px}
 .hero-ctas{display:flex;gap:14px;justify-content:center;margin-top:32px;flex-wrap:wrap}
 .hero-stage{position:relative;margin-top:56px}
-.hero-stage>img{width:100%;border-radius:24px;aspect-ratio:2.35/1;object-fit:cover}
+.hero-stage>img,.hero-stage>video{width:100%;border-radius:24px;aspect-ratio:2.35/1;object-fit:cover}
+.step video{width:100%;aspect-ratio:16/10;object-fit:cover}
+.dark video.bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
 .hero-term{position:absolute;left:50%;top:-28px;transform:translateX(-50%);width:min(620px,86%);background:rgba(5,8,12,.92);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:14px;box-shadow:0 30px 60px rgba(5,8,12,.35);text-align:left;overflow:hidden}
 .hero-term-bar{display:flex;gap:6px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
 .hero-term-bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18)}
@@ -171,8 +173,23 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:40px 0 56px;font
 .doc li{margin-top:10px}
 .doc img{border-radius:var(--r-card);margin-top:34px}
 
-.reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+.reveal{opacity:0;transform:translateY(26px) scale(.985);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1.4,.36,1);will-change:transform}
 .reveal.in{opacity:1;transform:none}
+
+/* FintechX-style code-driven motion: floating layers, drifting 2D elements, marquee, parallax */
+[data-parallax]{will-change:transform}
+.float-slow{animation:floaty 7s ease-in-out infinite alternate}
+@keyframes floaty{from{transform:translate(-50%,0)}to{transform:translate(-50%,-12px)}}
+.chip{position:absolute;border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(173,216,255,.55));box-shadow:0 6px 24px rgba(29,78,216,.28),0 0 0 1px rgba(255,255,255,.5) inset;pointer-events:none}
+.chip.glide{animation:glide var(--dur,14s) linear infinite}
+@keyframes glide{0%{offset-distance:0%;opacity:0}6%{opacity:1}94%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.spark{position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,190,90,.9);box-shadow:0 0 12px 4px rgba(255,170,60,.45);pointer-events:none;animation:rise var(--dur,9s) linear infinite;opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.9}90%{opacity:.6}100%{transform:translateY(-46vh);opacity:0}}
+.marq{overflow:hidden;position:relative}
+.marq-track{display:flex;gap:44px;align-items:center;width:max-content;animation:marq 28s linear infinite}
+.marq:hover .marq-track{animation-play-state:paused}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.float-slow,.chip.glide,.spark,.marq-track{animation:none}.chip,.spark{display:none}}
 .hidden{display:none!important}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 @media (max-width:900px){

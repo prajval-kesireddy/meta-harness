@@ -352,6 +352,102 @@
     ],
     "mcps": []
   },
+  "ai-video-generation": {
+    "title": "AI video generation",
+    "tagline": "Cinematic AI footage that holds together: shots, continuity, and a finished cut.",
+    "quality_expectation": "With this harness: a coherent AI-generated video at the level of the good stuff on your feed: consistent style across shots, characters that stay the same person, cuts that land. The honest part: generation itself costs money outside your Claude plan (credits or API), quality per shot is probabilistic (budget 1.5-2x generations per keeper), and photoreal humans talking still read uncanny; the harness works around that instead of pretending.",
+    "base_agent_hours": 3.0,
+    "template": "templates/ai-video-generation.md",
+    "questions": [
+      {
+        "id": "kind",
+        "prompt": "What are you making?",
+        "options": [
+          {"key": "ad", "label": "Product ad / brand film", "mult": 1.2, "addendum": "Ad path: the product must look IDENTICAL in every shot. Product reference images become the anchor for every generation; any shot where the product drifts gets killed regardless of how pretty it is."},
+          {"key": "story", "label": "Story / cinematic short", "mult": 1.5, "addendum": "Story path: character sheets are mandatory before any shot (one reference set per character, reused in every generation). Continuity ledger tracks wardrobe, lighting, and time-of-day across the shot list."},
+          {"key": "broll", "label": "B-roll / ambient loops (for a site, edit, or talk)", "mult": 0.8, "addendum": "B-roll path: one style anchor prompt fragment reused verbatim across every shot; loopability audit (first and last frames near-identical) for anything that will loop."}
+        ]
+      },
+      {
+        "id": "stack",
+        "prompt": "What generation stack do you have?",
+        "options": [
+          {"key": "credits", "label": "A credit platform (Higgsfield, Runway, Kling...)", "mult": 1.0, "addendum": "Credit platform: the harness preflights cost per shot model before generating anything, and routes each shot to the cheapest model that clears its quality bar, never the flagship by default."},
+          {"key": "api", "label": "API access (Veo via Google Cloud, etc.)", "mult": 1.0, "addendum": "API path: pipeline scripts with pacing and retry (bursts silently drop generations), plus the free-credits sequencing play: burn trial credits before paid."},
+          {"key": "none", "label": "Nothing yet, tell me what to get", "mult": 1.1, "addendum": "No stack yet: the composed harness opens with the current best-value setup from the registry (free tiers first: Google Cloud's $300 covers image anchors and some video; credits platforms for the shots free tiers can't do)."}
+        ]
+      },
+      {
+        "id": "length",
+        "prompt": "Target length?",
+        "options": [
+          {"key": "clip", "label": "One clip (5-10s)", "mult": 0.7, "addendum": "Single clip: still gets the anchor treatment (style frame first, then generate), because one-shot prompting is where most wasted credits go."},
+          {"key": "short", "label": "15-60s (stitched shots)", "mult": 1.0, "addendum": "Stitched short: 4-10 shots, continuity ledger, cuts on motion or beat, one color pass over the assembled cut so the shots read as one film."},
+          {"key": "long", "label": "1-3 min", "mult": 1.8, "addendum": "Long form: this is real production volume (20+ shots). Storyboard gate is mandatory; generation happens in continuity-grouped batches with a review gate per batch, never all at once."}
+        ]
+      }
+    ],
+    "pipeline": [
+      {"stage": "Creative lock", "what": "The film in words: shot list with per-shot purpose, style anchor phrase, character/product reference sheets.", "stack": "image gen for style frames + character sheets", "model": "opus", "loop": "user gate on the shot list"},
+      {"stage": "Anchor frames", "what": "One generated still per key shot locks look, palette, and continuity BEFORE any video credits burn.", "stack": "Gemini image gen (cheap) or platform stills", "model": "sonnet", "loop": "audit anchors side by side for drift"},
+      {"stage": "Shot generation", "what": "Image-to-video from anchors, cheapest model that clears the bar per shot, 1.5-2x overage budgeted.", "stack": "Higgsfield / Veo / Kling per registry ratings", "model": "sonnet", "loop": "per-shot keep/kill against the anchor"},
+      {"stage": "Continuity audit", "what": "All keepers reviewed as a set: style drift, character drift, lighting jumps. Offenders regenerate with tightened references.", "stack": "stills-strip comparison", "model": "opus", "loop": "to convergence, cap 3 rounds"},
+      {"stage": "Assembly & finish", "what": "Cut, music/VO, one color pass, platform-correct exports.", "stack": "ffmpeg (+ video harness's pacing audit)", "model": "sonnet", "loop": "full watch-through, evidence before done"}
+    ],
+    "installs": [
+      {"cmd": "npx skills add obra/superpowers", "why": "Keep/kill discipline per shot; verification before any 'the cut is done' claim."},
+      {"cmd": "See registry picks: current best-value generation stack for your budget", "why": "The generation landscape shifts monthly; the composed harness reads the live registry instead of hardcoding a platform."}
+    ],
+    "mcps": []
+  },
+  "icp-targeting": {
+    "title": "ICP targeting",
+    "tagline": "Figure out exactly who buys (your ideal customer profile), find them, and say the right thing to each segment.",
+    "quality_expectation": "With this harness: a falsifiable ideal-customer-profile definition (never a persona poster), a scored segment map, a real named list per segment built on free-tier discovery, and per-segment messaging in the buyer's own language. What it cannot do: know your market better than contact with it; every profile ships with the 3 assumptions only real outreach can settle.",
+    "base_agent_hours": 3.5,
+    "template": "templates/icp-targeting.md",
+    "questions": [
+      {
+        "id": "evidence",
+        "prompt": "Do you have customers already?",
+        "options": [
+          {"key": "yes", "label": "Yes, paying customers", "mult": 1.0, "addendum": "Customer evidence exists: the profile gets MINED, never invented. Best customers get profiled on firmographics, the trigger that made them buy, and the words they use; the ideal-customer hypothesis is whatever pattern survives that mining."},
+          {"key": "some", "label": "Users/pilots, not really paying", "mult": 1.1, "addendum": "Pilot evidence: mine who engages hardest, but tag the profile as engagement-based, since who USES and who PAYS are often different people; the harness makes that gap explicit."},
+          {"key": "no", "label": "No, starting from theory", "mult": 1.3, "addendum": "Theory stage: profile built from problem-intensity logic (who feels this pain most acutely, most often, with budget), then immediately pressure-tested against community evidence (who actually complains about this in public?)."}
+        ]
+      },
+      {
+        "id": "motion",
+        "prompt": "How will you reach them?",
+        "options": [
+          {"key": "outbound", "label": "Cold email / DM", "mult": 1.2, "addendum": "Outbound motion: list-building runs the free-tier stack (search-only discovery for names, cheap enrichment for contacts, never burn paid credits where a free tier exists), plus deliverability sanity rules so the list is usable."},
+          {"key": "content", "label": "Content / inbound", "mult": 1.0, "addendum": "Inbound motion: segments map to watering holes (where each segment already reads/hangs out) and the messaging kit becomes content angles per segment instead of sequences."},
+          {"key": "sales", "label": "Sales team / partners", "mult": 1.1, "addendum": "Sales motion: output shapes into a targeting brief per segment (trigger events, qualifying questions, disqualifiers) that a human seller can run."}
+        ]
+      },
+      {
+        "id": "scale",
+        "prompt": "How many target accounts/people do you need?",
+        "options": [
+          {"key": "small", "label": "50-100 (test a hypothesis)", "mult": 1.0, "addendum": "Test scale: one primary segment, one challenger segment, 50+ names each, enough to get signal without weeks of list work."},
+          {"key": "medium", "label": "Several hundred", "mult": 1.4, "addendum": "Campaign scale: 3-4 segments, scoring model applied to rank the full list, top decile flagged for manual-quality touches."},
+          {"key": "large", "label": "1,000+ (building a machine)", "mult": 1.8, "addendum": "Machine scale: repeatable list-refresh runbook, scoring automated, and a feedback loop wired in: reply data flows back into segment scores weekly."}
+        ]
+      }
+    ],
+    "pipeline": [
+      {"stage": "Evidence mining", "what": "Best-customer mining (or problem-intensity logic), triggers, and voice-of-customer language captured verbatim.", "stack": "customer data + community threads via agent-reach", "model": "opus", "loop": "every profile claim tagged evidence/assumption"},
+      {"stage": "Profile & segments", "what": "The falsifiable ideal-customer profile: firmographics, trigger, pain in their words, disqualifiers. Then 2-4 segments scored by fit and reachability.", "stack": "ICP.md + segment scorecard", "model": "opus", "loop": "user gate: the disqualifiers matter more than the qualifiers"},
+      {"stage": "List building", "what": "Named accounts/people per segment on the free-tier stack: search-only discovery, cheap enrichment, dedup, score.", "stack": "free-tier discovery + enrichment stack (never paid where free exists)", "model": "sonnet", "loop": "spot-verify 1 in 10 entries actually match the profile"},
+      {"stage": "Message-market fit", "what": "Per-segment messaging in the buyer's mined language: the pain named their way, proof, one clear ask. De-slopped hard.", "stack": "humanizer skill", "model": "opus", "loop": "de-slop; AI-sounding outreach is deleted on sight"},
+      {"stage": "Test kit & handoff", "what": "The hypothesis test: which segment, what sample, what reply rate settles it, and the 3 assumptions outreach must answer.", "stack": "TARGETING-BRIEF.md", "model": "opus", "loop": "verify list files + briefs exist before done"}
+    ],
+    "installs": [
+      {"cmd": "npx skills add hyz217/agent-reach", "why": "Voice-of-customer mining from the communities where the buyers actually complain."},
+      {"cmd": "npx skills add blader/humanizer", "why": "Per-segment messaging that survives a prospect's slop detector."}
+    ],
+    "mcps": []
+  },
   "competitive-analysis": {
     "title": "Competitive analysis",
     "tagline": "A real map of your market: who's winning, why, and where the opening is.",
