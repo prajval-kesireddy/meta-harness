@@ -1,0 +1,312 @@
+{
+  "_schema": "metaharness blueprint v1. Each use case: interview questions, estimator params (base_agent_hours * answer multipliers), external installs, MCP suggestions, and a process template in templates/.",
+  "website": {
+    "title": "Website",
+    "tagline": "A designed, deployed website that does not look AI-generated.",
+    "quality_expectation": "With this harness fully installed and the runbook followed: a site at the level of a good $3k-8k freelance build. Distinct art direction, real copy, responsive, deployed on a live URL. Without the harness, the same prompts typically produce a generic template-looking page.",
+    "base_agent_hours": 3.0,
+    "template": "templates/website.md",
+    "questions": [
+      {
+        "id": "scope",
+        "prompt": "Single page or multi-page?",
+        "options": [
+          {"key": "single", "label": "Single page (landing, portfolio one-pager)", "mult": 1.0, "addendum": "Scope: one page. Every design loop iteration re-audits the full page top to bottom."},
+          {"key": "multi", "label": "Multi-page (3-8 pages)", "mult": 2.3, "addendum": "Scope: multi-page. Add Phase 1b: sitemap + shared layout system BEFORE any page is designed. Design-loop the homepage to done first, extract the design system from it, then batch the inner pages against that system."},
+          {"key": "app", "label": "Web app (interactive, has state/auth/data)", "mult": 3.5, "addendum": "Scope: web app. Split the runbook: harness the UI shell with the design loop, but run features through the build-verify loop (tests first, then screenshot audit). Add a data phase: schema before UI."}
+        ]
+      },
+      {
+        "id": "reference",
+        "prompt": "Is there an existing site whose look/feel you want to base this on? (paste URL, or 'none')",
+        "freeform": true,
+        "mult_if_set": 1.15,
+        "addendum_if_set": "Reference capture phase is ACTIVE. Before designing: open the reference site, screenshot desktop + mobile, extract its type scale, spacing rhythm, palette, and interaction patterns into DESIGN-NOTES.md. Steal the system, not the pixels: recreating it verbatim both risks copyright and reads as a knockoff."
+      },
+      {
+        "id": "content",
+        "prompt": "Do you have the copy/content already, or should the agent write it?",
+        "options": [
+          {"key": "have", "label": "I have the content", "mult": 1.0, "addendum": "Content provided by user. Drop it into content/ before Phase 1 and treat it as immutable unless flagged."},
+          {"key": "write", "label": "Agent writes it", "mult": 1.3, "addendum": "Copywriting phase is ACTIVE (Phase 1a): voice interview answers -> draft copy -> humanize pass -> user-facing copy review gate BEFORE design starts. Design around real copy, never lorem ipsum."}
+        ]
+      },
+      {
+        "id": "deploy",
+        "prompt": "Deploy where?",
+        "options": [
+          {"key": "vercel", "label": "Vercel/Netlify (recommended)", "mult": 1.1, "addendum": "Deploy target: Vercel or Netlify. Final phase deploys, then re-runs the screenshot audit against the LIVE url (fonts and images break in prod more than anywhere else).", "fills": {"DEPLOY_STEP": "Deploy to Vercel or Netlify, confirm the deployment succeeded, and get the live URL."}},
+          {"key": "local", "label": "Just local files for now", "mult": 1.0, "addendum": "No deploy this run. Final phase produces a build folder and a one-command deploy note for later.", "fills": {"DEPLOY_STEP": "Produce the final build folder and write a one-command deploy note for later."}}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install frontend-design", "why": "Anthropic's own frontend-design skill: kills the generic AI aesthetic at the token level (typography, spacing, color discipline)."},
+      {"cmd": "npx skills add obra/superpowers", "why": "Process backbone: brainstorming before building, test-driven loops, verification-before-completion gates."},
+      {"cmd": "npx skills add nextlevelbros/gsap-skills", "why": "GSAP core + ScrollTrigger skills, for motion that feels engineered instead of CSS-transition slop."}
+    ],
+    "mcps": [
+      {"name": "playwright", "cmd": "claude mcp add playwright -- npx -y @playwright/mcp@latest", "why": "The screenshot-audit loop needs a browser the agent can drive. This is the single highest-leverage install in the whole harness: without it the agent designs blind."}
+    ]
+  },
+  "video": {
+    "title": "Video",
+    "tagline": "A finished rendered video: explainer, promo, or short-form.",
+    "quality_expectation": "With this harness: a video at solid freelance-editor level for motion-graphic explainers and promos (Remotion path), or a competent AI-generated clip sequence (gen-AI path). Talking-head realism and cinematic live-action are NOT what a code harness produces; be honest about that and use gen-AI shots as b-roll instead.",
+    "base_agent_hours": 3.5,
+    "template": "templates/video.md",
+    "questions": [
+      {
+        "id": "kind",
+        "prompt": "What kind of video?",
+        "options": [
+          {"key": "explainer", "label": "Motion-graphic explainer/promo (rendered from code)", "mult": 1.0, "addendum": "Path: Remotion (React-based video). Everything is code, so the design loop applies frame-by-frame: render stills at key timestamps, audit, iterate."},
+          {"key": "genai", "label": "AI-generated footage (Veo/Sora-class clips stitched)", "mult": 1.2, "addendum": "Path: gen-AI shots. The harness value is in the shot list, prompt engineering per shot, and continuity management (character sheets, style anchors). Generation costs API money on top of plan usage; the estimate flags this."},
+          {"key": "shortform", "label": "Short-form social clips (captions, hooks, cuts from existing footage)", "mult": 0.8, "addendum": "Path: ffmpeg + caption pipeline over user-provided footage. The loop audits hook strength in the first 2 seconds and caption legibility on a phone-sized render."}
+        ]
+      },
+      {
+        "id": "length",
+        "prompt": "Target length?",
+        "options": [
+          {"key": "short", "label": "Under 60 seconds", "mult": 1.0, "addendum": "Length: under 60s. One narrative beat, one CTA. Cut anything that delays the point past second 3."},
+          {"key": "medium", "label": "1-3 minutes", "mult": 1.6, "addendum": "Length: 1-3 min. Script phase must produce a beat sheet (6-10 beats); each beat is its own render-audit unit."},
+          {"key": "long", "label": "3-10 minutes", "mult": 2.8, "addendum": "Length: 3-10 min. This is a real production. Script gate + storyboard gate are both user-facing checkpoints before any rendering starts."}
+        ]
+      },
+      {
+        "id": "voiceover",
+        "prompt": "Voiceover?",
+        "options": [
+          {"key": "none", "label": "No VO (music + text)", "mult": 1.0, "addendum": "No voiceover. Text-on-screen carries the narrative; the audit checks every text card for phone-size legibility."},
+          {"key": "ai", "label": "AI voiceover", "mult": 1.2, "addendum": "AI voiceover ACTIVE: script -> TTS (ElevenLabs or platform TTS) -> timing map. Render timing locks to the VO track, never the other way around."},
+          {"key": "own", "label": "I'll record my own", "mult": 1.1, "addendum": "User-recorded VO. Agent produces the script with per-line timing budget, waits for the audio file, then times the edit to it."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "npx skills add remotion-dev/skills", "why": "Official Remotion best-practices skill: video-in-React idioms, composition structure, render pipeline."},
+      {"cmd": "npx skills add obra/superpowers", "why": "Verification gates: never claim a render is done without checking the actual output file."}
+    ],
+    "mcps": [
+      {"name": "ffmpeg (CLI, not MCP)", "cmd": "winget install ffmpeg  (or: brew install ffmpeg)", "why": "Every path ends in ffmpeg: concat, audio mux, format conversion, thumbnail extraction for audits."}
+    ]
+  },
+  "pitch-deck": {
+    "title": "Pitch deck / presentation",
+    "tagline": "A designed deck (.pptx or PDF) that reads investor-grade, not clip-art.",
+    "quality_expectation": "With this harness: a deck at the level of a good design-agency template customized well: consistent system, real hierarchy, honest charts. It will not invent your numbers or your story; the interview forces those out of you first, which is where most AI decks actually fail.",
+    "base_agent_hours": 2.0,
+    "template": "templates/pitch-deck.md",
+    "questions": [
+      {
+        "id": "purpose",
+        "prompt": "What's the deck for?",
+        "options": [
+          {"key": "fundraise", "label": "Fundraising (investors)", "mult": 1.3, "addendum": "Fundraise deck: lock the narrative to a proven arc (problem, why-now, product, traction, market, team, ask). The content gate checks every claim has a number or a receipt; investors pattern-match unsupported claims instantly."},
+          {"key": "sales", "label": "Sales / client pitch", "mult": 1.0, "addendum": "Sales deck: structure flips to customer-problem-first. The audit checks that the customer's world appears before your product does."},
+          {"key": "internal", "label": "Internal / class / talk", "mult": 0.8, "addendum": "Internal or talk deck: optimize for one-idea-per-slide and speaker support; denser appendix slides allowed."}
+        ]
+      },
+      {
+        "id": "slides",
+        "prompt": "Roughly how many slides?",
+        "options": [
+          {"key": "short", "label": "Under 12", "mult": 1.0, "addendum": "Under 12 slides. Every slide earns its place; the narrative gate kills any slide that repeats another's point."},
+          {"key": "long", "label": "12-30", "mult": 1.7, "addendum": "12-30 slides. Split into narrative core (first 12) and appendix; design-loop the core, batch the appendix against the extracted system."}
+        ]
+      },
+      {
+        "id": "brand",
+        "prompt": "Existing brand (colors/fonts/logo), or create one?",
+        "options": [
+          {"key": "have", "label": "Have brand assets", "mult": 1.0, "addendum": "Brand provided. Drop assets into brand/ first; the system phase extracts exact hex/type values from them, never approximates."},
+          {"key": "create", "label": "Create a look for this deck", "mult": 1.2, "addendum": "Brand creation ACTIVE: pick one typeface pair + 3-color system + one signature visual motif before slide 1 is designed. The motif is what makes the deck memorable; enforce it on every slide."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install pptx", "why": "Anthropic's pptx skill: programmatic PowerPoint generation that survives real-world editing afterward."},
+      {"cmd": "npx skills add obra/superpowers", "why": "Verification gates on every render pass."}
+    ],
+    "mcps": []
+  },
+  "document": {
+    "title": "Document / PDF",
+    "tagline": "A polished long-form document: report, whitepaper, ebook, proposal.",
+    "quality_expectation": "With this harness: a document that reads like a strong human analyst wrote it and looks professionally typeset. The two failure modes it kills: AI-slop prose (fixed by the voice+humanize loop) and ugly default formatting (fixed by the typeset loop with rendered-page audits).",
+    "base_agent_hours": 2.0,
+    "template": "templates/document.md",
+    "questions": [
+      {
+        "id": "kind",
+        "prompt": "What kind of document?",
+        "options": [
+          {"key": "report", "label": "Report / whitepaper (research-backed)", "mult": 1.3, "addendum": "Research-backed report: the research phase runs BEFORE outlining, with a source ledger (every claim maps to a source). Unverifiable claims get cut or flagged, never smoothed over."},
+          {"key": "ebook", "label": "Ebook / guide (teaching something)", "mult": 1.5, "addendum": "Ebook path: chapter map gate first. Each chapter is drafted, humanized, and typeset as its own loop unit so quality doesn't decay in later chapters (the classic long-doc failure)."},
+          {"key": "proposal", "label": "Proposal / one-pager / memo", "mult": 0.7, "addendum": "Short-doc path: single draft-review-typeset cycle, but the review gate is stricter: every paragraph must either inform a decision or get cut."}
+        ]
+      },
+      {
+        "id": "length",
+        "prompt": "Rough length?",
+        "options": [
+          {"key": "short", "label": "Under 10 pages", "mult": 1.0, "addendum": "Under 10 pages."},
+          {"key": "medium", "label": "10-40 pages", "mult": 1.8, "addendum": "10-40 pages: batch by section with a style anchor extracted from the first approved section."},
+          {"key": "long", "label": "40+ pages", "mult": 3.0, "addendum": "40+ pages: this is a book-scale run. Chapter-by-chapter sessions with a persistent style/claims ledger; never draft it in one context window."}
+        ]
+      },
+      {
+        "id": "format",
+        "prompt": "Output format?",
+        "options": [
+          {"key": "pdf", "label": "Designed PDF", "mult": 1.2, "addendum": "Designed PDF output: HTML-to-PDF typeset pipeline with rendered-page screenshot audits (margins, orphans, figure placement) before final export."},
+          {"key": "docx", "label": "Word doc (editable)", "mult": 1.0, "addendum": "Word output: use the docx skill; verify styles survive a round-trip open in Word, not just generation."},
+          {"key": "md", "label": "Markdown / web", "mult": 0.9, "addendum": "Markdown output: typeset loop is lighter; focus shifts to structure and prose quality."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install pdf && claude plugin install docx", "why": "Anthropic's document skills: real .docx/.pdf generation instead of markdown-pretending-to-be-a-document."},
+      {"cmd": "npx skills add blader/humanizer", "why": "The de-slop pass: strips AI-writing tells (inflated symbolism, rule-of-three, vague attribution) from every drafted section."}
+    ],
+    "mcps": []
+  },
+  "research": {
+    "title": "Deep research report",
+    "tagline": "A genuinely researched answer to a hard question, with receipts.",
+    "quality_expectation": "With this harness: coverage and sourcing at the level of a good analyst's week compressed into hours: multi-angle search sweeps, adversarial verification of key claims, and a source ledger. What it cannot do: access paywalled/private data, and it will say so per-claim instead of guessing.",
+    "base_agent_hours": 2.5,
+    "template": "templates/research.md",
+    "questions": [
+      {
+        "id": "depth",
+        "prompt": "How deep?",
+        "options": [
+          {"key": "scan", "label": "Landscape scan (what exists, who's who)", "mult": 1.0, "addendum": "Landscape scan: breadth over depth. Multi-modal sweep (by-vendor, by-community, by-content, by-time), dedup, then one synthesis pass."},
+          {"key": "decision", "label": "Decision support (help me choose X vs Y)", "mult": 1.4, "addendum": "Decision mode: define the decision criteria WITH weights before searching (the interview extracts them). Every finding maps to a criterion; the output is a scored recommendation, not a survey."},
+          {"key": "exhaustive", "label": "Exhaustive deep-dive (leave no stone unturned)", "mult": 2.5, "addendum": "Exhaustive mode: loop-until-dry search rounds (stop only after 2 consecutive rounds find nothing new), adversarial verification on every load-bearing claim, completeness critic pass at the end asking what's missing."}
+        ]
+      },
+      {
+        "id": "sources",
+        "prompt": "Any must-check source types?",
+        "options": [
+          {"key": "web", "label": "General web is fine", "mult": 1.0, "addendum": "General web sourcing."},
+          {"key": "social", "label": "Community/social too (Reddit, X, HN, YouTube)", "mult": 1.3, "addendum": "Community sourcing ACTIVE: practitioner takes from Reddit/X/HN/YouTube get their own sweep. These are opinions, not facts; the ledger tags them as sentiment and weights by corroboration."},
+          {"key": "academic", "label": "Academic/technical papers", "mult": 1.4, "addendum": "Academic sourcing ACTIVE: arXiv/Scholar sweep, citation-chase the 3 most load-bearing papers, and separate what the paper shows from what the abstract claims."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "npx skills add wshobson/agents", "why": "Research-agent patterns: parallel sweep + synthesis subagent structures."},
+      {"cmd": "npx skills add hyz217/agent-reach", "why": "Multi-platform reach (X, Reddit, YouTube, xiaohongshu, LinkedIn): pulls community content most research runs silently skip."}
+    ],
+    "mcps": []
+  },
+  "business-launch": {
+    "title": "Business launch kit",
+    "tagline": "Name, brand, landing page, and first-customers outreach system for a new business.",
+    "quality_expectation": "With this harness: everything a solo founder needs to start selling in a weekend: validated positioning, a brand that doesn't look canva-default, a live landing page, and a real outreach list with sequenced copy. What it will NOT do is validate demand for you: the harness builds the machine and hands you the levers, the market answers back only when you pull them.",
+    "base_agent_hours": 6.0,
+    "template": "templates/business-launch.md",
+    "questions": [
+      {
+        "id": "stage",
+        "prompt": "Where are you?",
+        "options": [
+          {"key": "idea", "label": "Just an idea", "mult": 1.3, "addendum": "Idea stage: Phase 0 (positioning interrogation) is the longest phase. The harness forces a falsifiable customer hypothesis and a kill criterion before anything gets built. Building before positioning is the #1 way founders burn a weekend."},
+          {"key": "offer", "label": "Know my offer, need the machine", "mult": 1.0, "addendum": "Offer known: Phase 0 compresses to a positioning one-pager gate, then straight into brand + landing + outreach in parallel."},
+          {"key": "selling", "label": "Already selling, need to look real + scale outreach", "mult": 0.9, "addendum": "Already selling: skip validation, mine existing customers for voice-of-customer language first (it becomes the landing copy), then scale the outreach system."}
+        ]
+      },
+      {
+        "id": "motion",
+        "prompt": "How will you get customers first?",
+        "options": [
+          {"key": "outbound", "label": "Cold outreach (email/DM)", "mult": 1.2, "addendum": "Outbound motion: list-building phase ACTIVE (free-tier stack: search-only discovery, cheap enrichment, never burn paid credits where a free tier exists), plus a 3-touch sequence with a reply-handling playbook."},
+          {"key": "content", "label": "Content / social", "mult": 1.2, "addendum": "Content motion: the outreach phase swaps to a 30-day content engine (see the social-content harness; this run generates its starter kit: pillars, hooks bank, first week's posts)."},
+          {"key": "ads", "label": "Paid ads", "mult": 1.1, "addendum": "Paid motion: landing page phase adds conversion instrumentation and 2 headline/hero variants for testing; ad copy kit generated against the same positioning doc."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install frontend-design", "why": "The landing page leg runs the website harness's design loop."},
+      {"cmd": "npx skills add obra/superpowers", "why": "Brainstorming discipline for positioning; verification gates everywhere else."},
+      {"cmd": "npx skills add blader/humanizer", "why": "All outward copy (landing, emails, posts) gets de-slopped; AI-sounding outreach gets deleted on sight by prospects."}
+    ],
+    "mcps": [
+      {"name": "playwright", "cmd": "claude mcp add playwright -- npx -y @playwright/mcp@latest", "why": "Design loop for the landing page + scraping public directories during list-building."}
+    ]
+  },
+  "social-content": {
+    "title": "Social content engine",
+    "tagline": "A 30-day content system for one platform: pillars, hooks, posts, and visuals.",
+    "quality_expectation": "With this harness: a month of platform-native content that reads like a sharp operator wrote it, plus the system to keep producing it. It optimizes for what performs on the platform, not for sounding like you (unless you feed it your winners). Follower growth depends on consistency and niche; the harness is honest that it controls the former only.",
+    "base_agent_hours": 2.5,
+    "template": "templates/social-content.md",
+    "questions": [
+      {
+        "id": "platform",
+        "prompt": "Which platform first?",
+        "options": [
+          {"key": "x", "label": "X / Twitter", "mult": 1.0, "addendum": "Platform: X. Format mix: single takes, threads, quote-adds. The hook audit is brutal here: first 8 words decide everything; every post gets 3 hook variants and the weakest two die."},
+          {"key": "linkedin", "label": "LinkedIn", "mult": 1.0, "addendum": "Platform: LinkedIn. Format mix: story posts, contrarian takes, carousels. The de-slop pass matters double here; LinkedIn AI-slop is a genre and readers are inoculated."},
+          {"key": "ig-tiktok", "label": "Instagram / TikTok (visual/video)", "mult": 1.5, "addendum": "Platform: IG/TikTok. Every content unit needs a visual; the image-gen pipeline and caption system run per-post. Short video scripts route through the video harness's short-form path."}
+        ]
+      },
+      {
+        "id": "voice",
+        "prompt": "Do you have past posts that performed well?",
+        "options": [
+          {"key": "yes", "label": "Yes, I'll share winners", "mult": 1.1, "addendum": "Winners provided: extract the actual patterns (structure, length, hook type, topic angle) from them into VOICE.md before generating anything. Generate to the pattern, not to vibes."},
+          {"key": "no", "label": "No, fresh start", "mult": 1.0, "addendum": "Fresh start: study 5 top accounts in the niche instead (public posts only), extract what performs, and A/B the first week across 2 styles to find the lane."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "npx skills add blader/humanizer", "why": "Every post ships through the de-slop pass. This single install is most of the difference between posting AI content and posting content."},
+      {"cmd": "npx skills add hyz217/agent-reach", "why": "Platform research: what's actually working in the niche this week, pulled from the platforms themselves."}
+    ],
+    "mcps": []
+  },
+  "competitive-analysis": {
+    "title": "Competitive analysis",
+    "tagline": "A real map of your market: who's winning, why, and where the opening is.",
+    "quality_expectation": "With this harness: a competitive map at the level of a good strategy analyst's two-week engagement: every named competitor verified to actually exist and actually ship, positioning pulled from their own pages, pricing and traction with receipts, community sentiment from real threads, and an honest 'where you lose' section. The failure mode it kills: AI competitive analyses that hallucinate features, miss the newest entrants, and flatter your idea.",
+    "base_agent_hours": 3.0,
+    "template": "templates/competitive-analysis.md",
+    "questions": [
+      {
+        "id": "market",
+        "prompt": "What are you analyzing competition for? (one line: your product/idea + who it's for)",
+        "freeform": true,
+        "mult_if_set": 1.0,
+        "addendum_if_set": "Subject locked. Every sweep and every verdict is anchored to THIS product and buyer, never the category in the abstract."
+      },
+      {
+        "id": "scope",
+        "prompt": "How wide should the net go?",
+        "options": [
+          {"key": "direct", "label": "Direct competitors only (same product, same buyer)", "mult": 1.0, "addendum": "Direct-only scope: the sweep still runs one adjacent-substitute round (what do buyers use INSTEAD, including duct-tape solutions and doing nothing), because the biggest competitor is usually not a company."},
+          {"key": "full", "label": "Full landscape (direct + adjacent + substitutes + incumbents)", "mult": 1.7, "addendum": "Full-landscape scope: four sweep lanes (direct, adjacent tools, incumbent suites bundling it for free, non-consumption workarounds), each with its own map quadrant."},
+          {"key": "watch", "label": "Standing watch (set up recurring monitoring too)", "mult": 2.0, "addendum": "Standing-watch scope: everything in full landscape PLUS a monitoring kit: saved search queries, GitHub/ProductHunt/HN watch script, and a weekly re-scan runbook so the map stays alive instead of rotting the day it ships."}
+        ]
+      },
+      {
+        "id": "decision",
+        "prompt": "What decision does this feed?",
+        "options": [
+          {"key": "build", "label": "Should I build this / keep building?", "mult": 1.0, "addendum": "Build/no-build decision: the output leads with the kill-test (is there a funded team shipping weekly at the exact same wedge?) and the differentiation surface, not the full museum tour."},
+          {"key": "position", "label": "How should I position against them?", "mult": 1.1, "addendum": "Positioning decision: extract each competitor's OWN claimed positioning verbatim from their pages, map the claimed-vs-actual gaps, and land on the angle nobody owns that you can defend."},
+          {"key": "invest", "label": "Market sizing / is this market real?", "mult": 1.3, "addendum": "Market-reality decision: traction receipts become mandatory per competitor (funding, pricing, hiring, release cadence, community pulse), and the synthesis grades market heat honestly, including 'this market is a graveyard' if the receipts say so."}
+        ]
+      }
+    ],
+    "installs": [
+      {"cmd": "npx skills add hyz217/agent-reach", "why": "The sentiment lanes: what Reddit/X/HN actually say about each competitor, which their landing pages will never tell you."},
+      {"cmd": "npx skills add wshobson/agents", "why": "Parallel sweep patterns: each competitor gets its own verification pass instead of one context window's fading attention."}
+    ],
+    "mcps": []
+  }
+}
