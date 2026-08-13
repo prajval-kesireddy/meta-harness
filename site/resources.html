@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the $300 image-generation stack — metaharness resources</title>
+<meta name="description" content="How to claim Google Cloud's $300 new-customer credit and turn it into roughly 2,200 high-resolution AI images through Gemini on Vertex AI, with application default credentials so no API keys ever expire on you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<div class="nav"><div class="wrap nav-in">
+  <a class="logo" href="index.html"><svg width="26" height="26" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1D1D1D"/><rect x="7" y="9.5" width="13" height="3.4" rx="1.7" fill="#fff"/><rect x="9.5" y="14.3" width="15.5" height="3.4" rx="1.7" fill="#1D4ED8"/><rect x="7" y="19.1" width="13" height="3.4" rx="1.7" fill="#fff"/></svg>metaharness</a>
+  <div class="nav-links"><a href="index.html#inputs">how it works</a><a href="harnesses.html">the harnesses</a><a href="harnesses.html#index">the index</a><a href="resources.html" style="color:var(--ink)">resources</a></div>
+  <div class="nav-cta"><a class="btn btn-blue" href="https://github.com/prajval-kesireddy/meta-harness">Use with Claude</a></div>
+</div></div>
+
+<article class="doc">
+  <h1>The $300 image-generation stack nobody claims.</h1>
+  <p class="doc-sub">Resources are the second input: the stuff that renders your pixels, voices, and clips. The full rated resource marketplace is coming. This guide ships first because it's the single biggest free unlock: Google Cloud hands every new customer $300 of credit, and pointed at Gemini image generation on Vertex AI that's a serious asset pipeline for zero dollars.</p>
+
+  <div class="stat">
+    <div><b>$300</b><span>Google Cloud new-customer credit, valid 90 days</span></div>
+    <div><b>~2,200</b><span>2K-resolution images at $0.134 each (gemini-3-pro-image)</span></div>
+    <div><b>~4,500</b><span>Higgsfield credits' worth of comparable stills (2 credits per image there)</span></div>
+  </div>
+
+  <img src="assets/img/hf13_credits.webp" alt="Golden credits cascading from a cloud into a collection machine">
+
+  <h2>Step 1: Claim the credit</h2>
+  <p>Create a Google Cloud account at <span style="font-family:var(--mono)">cloud.google.com/free</span>. The $300 credit is Google's standard offer for new customers; it applies automatically and covers Vertex AI. A card is required for verification, and nothing bills until you explicitly upgrade after the trial, so the worst case is the credits just expire.</p>
+
+  <h2>Step 2: One-time setup</h2>
+  <ol>
+    <li>Create a project in the Cloud console and enable the <b>Vertex AI API</b> for it.</li>
+    <li>Install the gcloud command line tool (<span style="font-family:var(--mono)">cloud.google.com/sdk</span>).</li>
+    <li>Authenticate with application default credentials, which is the part almost everyone skips:</li>
+  </ol>
+  <pre>gcloud auth application-default login</pre>
+  <p class="muted">Why this matters: the AI Studio API keys people usually grab are ephemeral and die mid-run, which is how most "my image script stopped working" stories end. Application default credentials refresh themselves. Set it once and every script on your machine just works.</p>
+
+  <h2>Step 3: Generate</h2>
+  <p>Call <span style="font-family:var(--mono)">gemini-3-pro-image</span> through Vertex AI. The request that matters, stripped to its bones:</p>
+  <pre>POST https://aiplatform.googleapis.com/v1/projects/YOUR_PROJECT/locations/global
+     /publishers/google/models/gemini-3-pro-image:generateContent
+
+headers:  Authorization: Bearer &lt;token from application default credentials&gt;
+          x-goog-user-project: YOUR_PROJECT
+body:     {"contents":{"role":"USER","parts":[{"text":"your prompt"}]},
+           "generationConfig":{"responseModalities":["TEXT","IMAGE"],
+           "imageConfig":{"aspectRatio":"16:9","imageSize":"2K"}}}</pre>
+  <p>The image comes back base64 inside <span style="font-family:var(--mono)">candidates[].content.parts[].inlineData.data</span>. Two practical rules from real runs: generate in pairs with a ~25 second pause (bursts of four hit rate limits and the image simply never arrives), and retry single failures rather than re-running the whole batch.</p>
+
+  <h2>What it's worth</h2>
+  <p>At $0.134 per 2K image, the credit buys roughly 2,200 images. On Higgsfield, a comparable still runs 2 credits, so the same output would take around 4,500 credits there, several months of a paid plan. Both belong in a real pipeline (Higgsfield's model catalog, motion tools, and character consistency features earn their credits); the point is sequencing: burn the free $300 first, spend credits where the free tier can't follow.</p>
+
+  <h2>Use it inside a harness</h2>
+  <p>The website, social content, and business launch harnesses all carry an asset-generation stage. Answer "generate them for me" at the interview and the composed harness wires this exact stack in: one style anchor defined first, batches generated against it, every image audited at the size it will actually render.</p>
+  <div class="hero-ctas" style="justify-content:flex-start;margin-top:30px">
+    <a class="btn btn-blue" href="https://github.com/prajval-kesireddy/meta-harness">Integrate with your Claude</a>
+    <a class="btn btn-white" href="harnesses.html">Explore the harnesses</a>
+  </div>
+</article>
+
+<footer><div class="wrap foot-in">
+  <a class="logo" href="index.html" style="font-size:16px"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1D1D1D"/><rect x="7" y="9.5" width="13" height="3.4" rx="1.7" fill="#fff"/><rect x="9.5" y="14.3" width="15.5" height="3.4" rx="1.7" fill="#1D4ED8"/><rect x="7" y="19.1" width="13" height="3.4" rx="1.7" fill="#fff"/></svg>metaharness</a>
+  <div>built with its own website harness · <a href="https://github.com/prajval-kesireddy/meta-harness" style="color:var(--blue)">github</a></div>
+</div></footer>
+</body>
+</html>

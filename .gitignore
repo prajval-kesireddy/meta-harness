@@ -8,3 +8,8 @@ _crop_*.png
 promo/node_modules/
 promo/out/
 site/_audit.py
+site/_audit*.png
+site/_crop*.png
+site/_contact*.png
+site/_ref*.png
+site/assets/img/*.png

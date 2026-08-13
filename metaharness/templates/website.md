@@ -42,7 +42,7 @@ Paste:
 
 ### Phase 4: Ship
 Paste:
-> Run Lighthouse (performance + accessibility, fix to 90+). {{DEPLOY_STEP}} Then verify like PROCESS-CORE.md demands: fetch the final URL, screenshot both viewports, confirm every checklist item on the LIVE build, and report with the evidence attached.
+> Run Lighthouse (performance + accessibility, fix to 90+). Deploy (Vercel or Netlify by default; if the user wants local only, produce the build folder and a one-command deploy note instead). Then verify like PROCESS-CORE.md demands: fetch the final URL, screenshot both viewports, confirm every checklist item on the LIVE build, and report with the evidence attached.
 
 ## Base design checklist
 

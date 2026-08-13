@@ -100,8 +100,8 @@ def freeform_is_set(value):
 
 
 def resolve(blueprint, answers):
-    """Walk questions+answers -> (multiplier, addenda[], fills{}, answer_lines[])."""
-    mult, addenda, fills, lines = 1.0, [], {}, []
+    """Walk questions+answers -> (multiplier, addenda[], fills{}, answer_lines[], extra_installs[])."""
+    mult, addenda, fills, lines, extra_installs = 1.0, [], {}, [], []
     for q in blueprint["questions"]:
         ans = answers.get(q["id"], "")
         if q.get("freeform"):
@@ -109,6 +109,7 @@ def resolve(blueprint, answers):
                 mult *= q.get("mult_if_set", 1.0)
                 if q.get("addendum_if_set"):
                     addenda.append(q["addendum_if_set"] + f"\n  Provided: {ans}")
+                extra_installs.extend(q.get("installs_if_set", []))
                 lines.append(f"- {q['prompt']}  **{ans}**")
             else:
                 lines.append(f"- {q['prompt']}  **(none)**")
@@ -121,8 +122,9 @@ def resolve(blueprint, answers):
         if opt.get("addendum"):
             addenda.append(opt["addendum"])
         fills.update(opt.get("fills", {}))
+        extra_installs.extend(opt.get("installs_if_set", []))
         lines.append(f"- {q['prompt']}  **{opt['label']}**")
-    return mult, addenda, fills, lines
+    return mult, addenda, fills, lines, extra_installs
 
 
 def estimate(blueprint, mult):
@@ -178,8 +180,23 @@ long enough that these rules feel distant, re-read them before continuing.
 """
 
 
+def pipeline_text(blueprint):
+    stages = blueprint.get("pipeline", [])
+    if not stages:
+        return ""
+    out = ["## The pipeline (stage, model, exit)", "",
+           "Run stages in order. The model column matters: Opus where taste and "
+           "judgment concentrate, Sonnet for production loops, Haiku for bulk "
+           "mechanical passes. One-model-for-everything is the #2 harness "
+           "mistake after over-installing skills.", ""]
+    for i, s in enumerate(stages, 1):
+        out.append(f"{i}. **{s['stage']}** [{s['model']}]: {s['what']} "
+                   f"Stack: {s['stack']}. Exit: {s['loop']}.")
+    return "\n".join(out)
+
+
 def compose(usecase, blueprint, answers, plan, out_dir):
-    mult, addenda, fills, answer_lines = resolve(blueprint, answers)
+    mult, addenda, fills, answer_lines, extra_installs = resolve(blueprint, answers)
     est = estimate(blueprint, mult)
     est_text = estimate_text(est, plan)
 
@@ -187,7 +204,7 @@ def compose(usecase, blueprint, answers, plan, out_dir):
     filled = (template
               .replace("{{ANSWERS}}", "\n".join(answer_lines))
               .replace("{{ADDENDA}}", "\n\n".join(f"**Config note:** {a}" for a in addenda))
-              .replace("{{ESTIMATE}}", est_text))
+              .replace("{{ESTIMATE}}", est_text + "\n\n" + pipeline_text(blueprint)))
     for key, val in fills.items():
         filled = filled.replace("{{" + key + "}}", val)
     # Strip any placeholder no answer filled.
@@ -216,7 +233,7 @@ def compose(usecase, blueprint, answers, plan, out_dir):
     lines = [f"# Install list: {blueprint['title']} harness", "",
              "Run these in the project folder. Install ONLY these; piling on extra "
              "skills makes the agent worse, not better.", ""]
-    for item in blueprint.get("installs", []):
+    for item in blueprint.get("installs", []) + extra_installs:
         lines += [f"```bash\n{item['cmd']}\n```", f"{item['why']}", ""]
     for m in blueprint.get("mcps", []):
         lines += [f"```bash\n{m['cmd']}\n```", f"{m['name']}: {m['why']}", ""]
@@ -260,6 +277,8 @@ def cmd_run(harnesses, args):
     blueprint = harnesses[args.use_case]
     print(f"\n== {blueprint['title']} ==\n{blueprint['tagline']}\n")
     print(f"What to expect: {blueprint['quality_expectation']}")
+    n = len(blueprint["questions"])
+    print(f"\n{n} questions. That's the whole interview.")
     answers = collect_answers(blueprint, args.answers, args.yes)
     out_dir = args.out or f"./{args.use_case}-harness"
     est, est_text = compose(args.use_case, blueprint, answers, args.plan, out_dir)

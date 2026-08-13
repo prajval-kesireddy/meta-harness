@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the harness explorer — metaharness</title>
+<meta name="description" content="Every harness: its questions stated up front, its pipeline stage by stage with the model per stage, and the rated index it composes from.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<div class="nav"><div class="wrap nav-in">
+  <a class="logo" href="index.html"><svg width="26" height="26" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1D1D1D"/><rect x="7" y="9.5" width="13" height="3.4" rx="1.7" fill="#fff"/><rect x="9.5" y="14.3" width="15.5" height="3.4" rx="1.7" fill="#1D4ED8"/><rect x="7" y="19.1" width="13" height="3.4" rx="1.7" fill="#fff"/></svg>metaharness</a>
+  <div class="nav-links"><a href="index.html#inputs">how it works</a><a href="#" data-nav="harnesses">the harnesses</a><a href="#" data-nav="index">the index</a><a href="resources.html">resources</a></div>
+  <div class="nav-cta"><a class="btn btn-blue" href="https://github.com/prajval-kesireddy/meta-harness">Use with Claude</a></div>
+</div></div>
+
+<main class="wrap">
+  <div class="tool-head">
+    <h2 style="font-family:var(--disp);font-weight:600">The harness explorer.</h2>
+    <p class="pane-lede" style="margin-top:12px">Every harness states its interview up front and shows the exact machine it builds: stage by stage, the model each stage runs on, and what it takes to exit. In your own Claude it goes further and tailors all of this to you.</p>
+  </div>
+
+  <div class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="harnesses">the harnesses</button>
+    <button class="tab" data-tab="index">the rated index</button>
+    <div class="searchbox"><input id="search" type="search" placeholder="search…" aria-label="Search"></div>
+  </div>
+
+  <section class="pane active" id="pane-harnesses">
+    <p class="pane-lede" style="font-family:var(--mono);font-size:12.5px">opus = taste and judgment stages · sonnet = production loops · haiku = bulk passes</p>
+    {{HARNESS_CARDS}}
+  </section>
+
+  <section class="pane" id="pane-index">
+    <p class="pane-lede">Every directory ranks by stars or install counts, which measure marketing. These ratings answer a harder question: composed into a harness, does this tool measurably improve the outcome? A daily sweep of GitHub feeds new candidates in and flags anything going stale; nothing gets listed unrated.</p>
+    <p class="pane-lede" style="font-family:var(--mono);font-size:12px;margin-top:10px">{{ENTRY_COUNT}} entries · updated {{UPDATED}}</p>
+    <div class="rows">{{INDEX_ROWS}}</div>
+  </section>
+</main>
+
+<footer><div class="wrap foot-in">
+  <a class="logo" href="index.html" style="font-size:16px"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1D1D1D"/><rect x="7" y="9.5" width="13" height="3.4" rx="1.7" fill="#fff"/><rect x="9.5" y="14.3" width="15.5" height="3.4" rx="1.7" fill="#1D4ED8"/><rect x="7" y="19.1" width="13" height="3.4" rx="1.7" fill="#fff"/></svg>metaharness</a>
+  <div>built with its own website harness · <a href="https://github.com/prajval-kesireddy/meta-harness" style="color:var(--blue)">github</a></div>
+</div></footer>
+
+<script>
+  const panes = {harnesses: document.getElementById('pane-harnesses'), index: document.getElementById('pane-index')};
+  const tabs = [...document.querySelectorAll('.tab')];
+  function show(name){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    Object.entries(panes).forEach(([k,p]) => p.classList.toggle('active', k === name));
+    doSearch();
+  }
+  tabs.forEach(t => t.addEventListener('click', () => { show(t.dataset.tab); history.replaceState(null,'','#'+t.dataset.tab); }));
+  document.querySelectorAll('[data-nav]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.nav); }));
+  const h = location.hash.slice(1);
+  if (h === 'index') show('index');
+  else if (h && document.getElementById(h)) { show('harnesses'); setTimeout(()=>document.getElementById(h).scrollIntoView({behavior:'smooth'}), 60); }
+
+  const search = document.getElementById('search');
+  function doSearch(){
+    const q = search.value.trim().toLowerCase();
+    document.querySelectorAll('.pane.active [data-search]').forEach(el => {
+      el.classList.toggle('hidden', q !== '' && !el.dataset.search.includes(q));
+    });
+  }
+  search.addEventListener('input', doSearch);
+</script>
+</body>
+</html>

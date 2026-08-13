@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the harness explorer — metaharness</title>
+<meta name="description" content="Every harness: its questions stated up front, its pipeline stage by stage with the model per stage, and the rated index it composes from.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<div class="nav"><div class="wrap nav-in">
+  <a class="logo" href="index.html"><svg width="26" height="26" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1D1D1D"/><rect x="7" y="9.5" width="13" height="3.4" rx="1.7" fill="#fff"/><rect x="9.5" y="14.3" width="15.5" height="3.4" rx="1.7" fill="#1D4ED8"/><rect x="7" y="19.1" width="13" height="3.4" rx="1.7" fill="#fff"/></svg>metaharness</a>
+  <div class="nav-links"><a href="index.html#inputs">how it works</a><a href="#" data-nav="harnesses">the harnesses</a><a href="#" data-nav="index">the index</a><a href="resources.html">resources</a></div>
+  <div class="nav-cta"><a class="btn btn-blue" href="https://github.com/prajval-kesireddy/meta-harness">Use with Claude</a></div>
+</div></div>
+
+<main class="wrap">
+  <div class="tool-head">
+    <h2 style="font-family:var(--disp);font-weight:600">The harness explorer.</h2>
+    <p class="pane-lede" style="margin-top:12px">Every harness states its interview up front and shows the exact machine it builds: stage by stage, the model each stage runs on, and what it takes to exit. In your own Claude it goes further and tailors all of this to you.</p>
+  </div>
+
+  <div class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="harnesses">the harnesses</button>
+    <button class="tab" data-tab="index">the rated index</button>
+    <div class="searchbox"><input id="search" type="search" placeholder="search…" aria-label="Search"></div>
+  </div>
+
+  <section class="pane active" id="pane-harnesses">
+    <p class="pane-lede" style="font-family:var(--mono);font-size:12.5px">opus = taste and judgment stages · sonnet = production loops · haiku = bulk passes</p>
+    
+    <article class="hcard" id="website" data-search="website a designed, deployed website that does not look ai-generated. website taste lock copy type &amp; tokens build design loop motion verify &amp; ship">
+      <div class="hcard-head"><h3>Website</h3>
+        <div class="hcard-est">2&ndash;10 agent-hours typical</div></div>
+      <p class="hcard-tag">A designed, deployed website that does not look AI-generated.</p>
+      <div class="qhead">4 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">Do you have any websites you want to copy or take inspiration from? (URLs, or 'none')</div>
+          <div class="hq-detail">free answer</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">What type of site? (single page, multi-page, or a web app)</div>
+          <div class="hq-detail">Single page / Multi-page / Web app</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">Do you already have visual assets (logo, photos, illustrations), or should they be generated?</div>
+          <div class="hq-detail">Have assets / Generate them for me</div></div></div>
+        <div class="hq"><div class="hq-no">Q4</div>
+          <div><div class="hq-prompt">What else do you want? (anything: copy written for you, a specific vibe, dark mode, a form, 'nothing')</div>
+          <div class="hq-detail">free answer</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Taste lock</div>
+          <div class="rstage-what">Art direction in words: type pairing, palette, layout personality, one signature move. Reference capture if a URL was given.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="frontend-design skill + playwright MCP (reference screenshots, computed styles)"><img src="assets/logos/playwright.svg" alt="" title="frontend-design skill + playwright MCP (reference screenshots, computed styles)"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">2. Copy</div>
+          <div class="rstage-what">Final human-quality prose before any layout exists.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer skill"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">3. Type &amp; tokens</div>
+          <div class="rstage-what">Font pairing loaded and proofed at real sizes; spacing scale and color system locked as CSS tokens.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="frontend-design skill + Google Fonts"><img src="assets/logos/googlegemini.svg" alt="" title="frontend-design skill + Google Fonts"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">4. Build</div>
+          <div class="rstage-what">Semantic structure, mobile-first, real content. Multi-page: one subagent per page against the locked system.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="Claude Code subagents"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">5. Design loop</div>
+          <div class="rstage-what">Screenshot 1440px and 390px, audit against the written checklist, fix top 3, repeat.</div>
+          <div class="rstage-tools"><img src="assets/logos/playwright.svg" alt="" title="playwright MCP"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">6. Motion</div>
+          <div class="rstage-what">Scroll reveals, hover states, one signature interaction; reduced-motion respected.</div>
+          <div class="rstage-tools"><img src="assets/logos/greensock.svg" alt="" title="GSAP core + ScrollTrigger skills"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">7. Verify &amp; ship</div>
+          <div class="rstage-what">Lighthouse 90+, deploy, re-audit the LIVE url.</div>
+          <div class="rstage-tools"><img src="assets/logos/lighthouse.svg" alt="" title="Lighthouse + Vercel/Netlify"><img src="assets/logos/vercel.svg" alt="" title="Lighthouse + Vercel/Netlify"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="video" data-search="video a finished rendered video: explainer, promo, or short-form. video script &amp; beats style frames production frame loop audio &amp; pacing final render &amp; verify">
+      <div class="hcard-head"><h3>Video</h3>
+        <div class="hcard-est">2&ndash;11 agent-hours typical</div></div>
+      <p class="hcard-tag">A finished rendered video: explainer, promo, or short-form.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">What kind of video?</div>
+          <div class="hq-detail">Motion-graphic explainer/promo / AI-generated footage / Short-form social clips</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">Target length?</div>
+          <div class="hq-detail">Under 60 seconds / 1-3 minutes / 3-10 minutes</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">Voiceover?</div>
+          <div class="hq-detail">No VO / AI voiceover / I'll record my own</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Script &amp; beats</div>
+          <div class="rstage-what">Beat sheet: timestamp budget, visual, VO/text line, purpose per beat. De-slopped.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer skill"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">2. Style frames</div>
+          <div class="rstage-what">One designed still per key beat locks the look before motion exists.</div>
+          <div class="rstage-tools"><img src="assets/logos/remotion.svg" alt="" title="Remotion skill (or image-gen style anchors on the gen-AI path)"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">3. Production</div>
+          <div class="rstage-what">One test beat end to end, then all beats.</div>
+          <div class="rstage-tools"><img src="assets/logos/remotion.svg" alt="" title="Remotion / shot-prompt kit / ffmpeg cut list per path"><img src="assets/logos/ffmpeg.svg" alt="" title="Remotion / shot-prompt kit / ffmpeg cut list per path"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">4. Frame loop</div>
+          <div class="rstage-what">Extract stills at every beat boundary, audit composition + legibility + continuity, re-render affected beats.</div>
+          <div class="rstage-tools"><img src="assets/logos/ffmpeg.svg" alt="" title="ffmpeg stills"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">5. Audio &amp; pacing</div>
+          <div class="rstage-what">VO/music placed, levels sane (-14 LUFS for social), cuts land on beats, attention-drop moments tightened.</div>
+          <div class="rstage-tools"><img src="assets/logos/ffmpeg.svg" alt="" title="ffmpeg + TTS where configured"><img src="assets/logos/elevenlabs.svg" alt="" title="ffmpeg + TTS where configured"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">6. Final render &amp; verify</div>
+          <div class="rstage-what">Target-res render + phone-preview render; play the actual file, spot-check sync at 3 points.</div>
+          <div class="rstage-tools"><img src="assets/logos/remotion.svg" alt="" title="Remotion/ffmpeg"><img src="assets/logos/ffmpeg.svg" alt="" title="Remotion/ffmpeg"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="pitch-deck" data-search="pitch deck / presentation a designed deck (.pptx or pdf) that reads investor-grade, not clip-art. pitch-deck narrative system &amp; heroes batch build consistency loop export &amp; verify">
+      <div class="hcard-head"><h3>Pitch deck / presentation</h3>
+        <div class="hcard-est">1&ndash;6 agent-hours typical</div></div>
+      <p class="hcard-tag">A designed deck (.pptx or PDF) that reads investor-grade, not clip-art.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">What's the deck for?</div>
+          <div class="hq-detail">Fundraising / Sales / client pitch / Internal / class / talk</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">Roughly how many slides?</div>
+          <div class="hq-detail">Under 12 / 12-30</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">Existing brand (colors/fonts/logo), or create one?</div>
+          <div class="hq-detail">Have brand assets / Create a look for this deck</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Narrative</div>
+          <div class="rstage-what">The deck as a 10-15 sentence story, one takeaway sentence per future slide, evidence named per claim.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">2. System &amp; heroes</div>
+          <div class="rstage-what">Slide system (type pair, 3 colors, grid, motif) + the 3 hardest slides designed first.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="pptx skill, render-to-image"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">3. Batch build</div>
+          <div class="rstage-what">Every remaining slide strictly against the system; honest-chart rules on all data.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="pptx skill"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">4. Consistency loop</div>
+          <div class="rstage-what">All slides rendered as one strip; cross-slide alignment drift is the machine-deck tell.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">5. Export &amp; verify</div>
+          <div class="rstage-what">Open the real exported file, fonts intact, headlines read as a story in order.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="pptx/PDF export"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="document" data-search="document / pdf a polished long-form document: report, whitepaper, ebook, proposal. document reader &amp; skeleton research voice anchor batch draft whole-doc pass typeset &amp; ship">
+      <div class="hcard-head"><h3>Document / PDF</h3>
+        <div class="hcard-est">1&ndash;6 agent-hours typical</div></div>
+      <p class="hcard-tag">A polished long-form document: report, whitepaper, ebook, proposal.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">What kind of document?</div>
+          <div class="hq-detail">Report / whitepaper / Ebook / guide / Proposal / one-pager / memo</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">Rough length?</div>
+          <div class="hq-detail">Under 10 pages / 10-40 pages / 40+ pages</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">Output format?</div>
+          <div class="hq-detail">Designed PDF / Word doc / Markdown / web</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Reader &amp; skeleton</div>
+          <div class="rstage-what">Define the reader, then every section with its one-sentence takeaway and target length.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">2. Research</div>
+          <div class="rstage-what">Runs before drafting when research-backed: source ledger, claim-&gt;source-&gt;date.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="research loop, parallel sweep subagents"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">3. Voice anchor</div>
+          <div class="rstage-what">The hardest section drafted first and de-slopped until genuinely human; its patterns extracted to VOICE.md.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer skill"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">4. Batch draft</div>
+          <div class="rstage-what">Remaining sections one at a time against VOICE.md; fresh session per section past 10 pages.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer per section"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">5. Whole-doc pass</div>
+          <div class="rstage-what">Full read as the defined reader: transitions, repeats, voice drift, payoff placement.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">6. Typeset &amp; ship</div>
+          <div class="rstage-what">Render every page to image, audit margins/orphans/figures, fix, re-render.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="pdf/docx skills, HTML-to-PDF"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="research" data-search="deep research report a genuinely researched answer to a hard question, with receipts. research question discipline sweep rounds adversarial verify synthesis completeness critic">
+      <div class="hcard-head"><h3>Deep research report</h3>
+        <div class="hcard-est">2&ndash;8 agent-hours typical</div></div>
+      <p class="hcard-tag">A genuinely researched answer to a hard question, with receipts.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">How deep?</div>
+          <div class="hq-detail">Landscape scan / Decision support / Exhaustive deep-dive</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">Any must-check source types?</div>
+          <div class="hq-detail">General web is fine / Community/social too / Academic/technical papers</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">What form should the answer take?</div>
+          <div class="hq-detail">Tight memo / Scored recommendation / Full report</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Question discipline</div>
+          <div class="rstage-what">Falsifiable restatement, sub-questions, sweep lanes, expected findings written BEFORE searching.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">2. Sweep rounds</div>
+          <div class="rstage-what">Every lane in parallel, each blind to the others; findings logged to the source ledger; gap question re-sweeps.</div>
+          <div class="rstage-tools"><img src="assets/logos/github.svg" alt="" title="parallel subagents + agent-reach for community lanes"><img src="assets/logos/claude.svg" alt="" title="parallel subagents + agent-reach for community lanes"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">3. Adversarial verify</div>
+          <div class="rstage-what">Every load-bearing claim gets a refutation attempt: counter-search, incentive check, date check.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="refuter subagents, one per claim"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">4. Synthesis</div>
+          <div class="rstage-what">Answer first with confidence levels, then reasoning, then receipts. De-slopped.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer skill"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">5. Completeness critic</div>
+          <div class="rstage-what">One fresh pass: what angle, source type, or stakeholder did we never look at?</div>
+          <div class="rstage-tools"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="business-launch" data-search="business launch kit name, brand, landing page, and first-customers outreach system for a new business. business-launch positioning interrogation brand kit landing page customer machine launch runbook">
+      <div class="hcard-head"><h3>Business launch kit</h3>
+        <div class="hcard-est">4&ndash;19 agent-hours typical</div></div>
+      <p class="hcard-tag">Name, brand, landing page, and first-customers outreach system for a new business.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">Where are you?</div>
+          <div class="hq-detail">Just an idea / Know my offer, need the machine / Already selling, need to look real + scale outreach</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">How will you get customers first?</div>
+          <div class="hq-detail">Cold outreach / Content / social / Paid ads</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">Weekend sprint, or steady build?</div>
+          <div class="hq-detail">Weekend sprint / Steady build</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Positioning interrogation</div>
+          <div class="rstage-what">Buyer, pain in the buyer's words, offer, price hypothesis, kill criterion. Assumptions flagged.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">2. Brand kit</div>
+          <div class="rstage-what">Name shortlist with collision checks, wordmark, palette, type pair, de-slopped one-liner.</div>
+          <div class="rstage-tools"><img src="assets/logos/googlegemini.svg" alt="" title="image gen for marks (Gemini/Vertex)"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">3. Landing page</div>
+          <div class="rstage-what">The website harness pipeline runs nested here with POSITIONING.md as copy source.</div>
+          <div class="rstage-tools"><img src="assets/logos/anthropic.svg" alt="" title="frontend-design + playwright MCP"><img src="assets/logos/playwright.svg" alt="" title="frontend-design + playwright MCP"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">4. Customer machine</div>
+          <div class="rstage-what">Per motion: outbound list + 3-touch sequence, or content starter kit, or ads kit. All copy de-slopped.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer + free-tier discovery stack"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">5. Launch runbook</div>
+          <div class="rstage-what">Day-by-day operator instructions, kill-criterion triggers, honest-gaps section.</div>
+          <div class="rstage-tools"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="social-content" data-search="social content engine a 30-day content system for one platform: pillars, hooks, posts, and visuals. social-content pattern research pillars &amp; hooks batch posts visuals operating loop">
+      <div class="hcard-head"><h3>Social content engine</h3>
+        <div class="hcard-est">2&ndash;8 agent-hours typical</div></div>
+      <p class="hcard-tag">A 30-day content system for one platform: pillars, hooks, posts, and visuals.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">Which platform first?</div>
+          <div class="hq-detail">X / Twitter / LinkedIn / Instagram / TikTok</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">Do you have past posts that performed well?</div>
+          <div class="hq-detail">Yes, I'll share winners / No, fresh start</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">What's the account actually for?</div>
+          <div class="hq-detail">Grow an audience / Drive sales/leads / Build authority in a niche</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">1. Pattern research</div>
+          <div class="rstage-what">Extract what actually performs: user's winners, or 5 top accounts in the niche.</div>
+          <div class="rstage-tools"><img src="assets/logos/github.svg" alt="" title="agent-reach (platform pulls)"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">2. Pillars &amp; hooks</div>
+          <div class="rstage-what">3-4 pillars tied to the goal; 30+ hooks written, bottom third killed.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">3. Batch posts</div>
+          <div class="rstage-what">30 days drafted in week batches; per post: de-slop + platform-native audit.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer per post"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">4. Visuals</div>
+          <div class="rstage-what">One style anchor, then per-post images audited at phone size.</div>
+          <div class="rstage-tools"><img src="assets/logos/googlegemini.svg" alt="" title="Gemini image gen (Vertex)"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">haiku</div>
+          <div class="rstage-name">5. Operating loop</div>
+          <div class="rstage-what">Calendar + the 30-minute weekly ritual: approve, read numbers, feed winners back.</div>
+          <div class="rstage-tools"></div>
+        </div></div></div>
+    </article>
+
+    <article class="hcard" id="competitive-analysis" data-search="competitive analysis a real map of your market: who's winning, why, and where the opening is. competitive-analysis market frame discovery sweeps verify &amp; profile gap mining verdict">
+      <div class="hcard-head"><h3>Competitive analysis</h3>
+        <div class="hcard-est">2&ndash;10 agent-hours typical</div></div>
+      <p class="hcard-tag">A real map of your market: who's winning, why, and where the opening is.</p>
+      <div class="qhead">3 questions. That's the whole interview. (Follow-ups come later, at gates where you have something to react to.)</div>
+      <div class="hq-list">
+        <div class="hq"><div class="hq-no">Q1</div>
+          <div><div class="hq-prompt">What are you analyzing competition for? (one line: your product/idea + who it's for)</div>
+          <div class="hq-detail">free answer</div></div></div>
+        <div class="hq"><div class="hq-no">Q2</div>
+          <div><div class="hq-prompt">How wide should the net go?</div>
+          <div class="hq-detail">Direct competitors only / Full landscape / Standing watch</div></div></div>
+        <div class="hq"><div class="hq-no">Q3</div>
+          <div><div class="hq-prompt">What decision does this feed?</div>
+          <div class="hq-detail">Should I build this / keep building? / How should I position against them? / Market sizing / is this market real?</div></div></div></div>
+      <div class="qhead">Then the pipeline runs:</div>
+      <div class="ribbon" style="margin-top:0"><div class="ribbon-track">
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">1. Market frame</div>
+          <div class="rstage-what">Decision-relevant axes (never generic feature grids), sweep lanes incl. the last-90-days freshness lane.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">2. Discovery sweeps</div>
+          <div class="rstage-what">Every lane in parallel: sites, GitHub velocity, ProductHunt/HN, app stores, community threads, review sites.</div>
+          <div class="rstage-tools"><img src="assets/logos/github.svg" alt="" title="parallel subagents + agent-reach"><img src="assets/logos/claude.svg" alt="" title="parallel subagents + agent-reach"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">sonnet</div>
+          <div class="rstage-name">3. Verify &amp; profile</div>
+          <div class="rstage-what">Fetch each survivor's actual site/repo: positioning verbatim, pricing, traction receipts, 2-3 real threads. Kill the dead and misremembered.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="one verification subagent per competitor"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">4. Gap mining</div>
+          <div class="rstage-what">The complaint surface across all competitors: what buyers keep asking for that nobody ships.</div>
+          <div class="rstage-tools"></div>
+        </div>
+        <div class="rstage">
+          <div class="rstage-model">opus</div>
+          <div class="rstage-name">5. Verdict</div>
+          <div class="rstage-what">Decision answered first with confidence; map; profiles; differentiation surface; the honest where-you-lose section.</div>
+          <div class="rstage-tools"><img src="assets/logos/claude.svg" alt="" title="humanizer + completeness critic"></div>
+        </div></div></div>
+    </article>
+  </section>
+
+  <section class="pane" id="pane-index">
+    <p class="pane-lede">Every directory ranks by stars or install counts, which measure marketing. These ratings answer a harder question: composed into a harness, does this tool measurably improve the outcome? A daily sweep of GitHub feeds new candidates in and flags anything going stale; nothing gets listed unrated.</p>
+    <p class="pane-lede" style="font-family:var(--mono);font-size:12px;margin-top:10px">21 entries · updated 2026-08-13</p>
+    <div class="rows">
+      <div class="row" data-search="anthropics/skills: frontend-design plugin-skill the single biggest visible-quality jump for web output; kills the generic ai aesthetic at the source.">
+        <img class="row-logo" src="assets/logos/anthropic.svg" alt="">
+        <div>
+          <div class="row-name">anthropics/skills: frontend-design <span class="row-type">plugin-skill</span></div>
+          <p class="row-why">The single biggest visible-quality jump for web output; kills the generic AI aesthetic at the source.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/anthropics/skills" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">10<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="playwright mcp mcp gives the agent eyes. every design loop depends on it; the highest-leverage single install for visual work.">
+        <img class="row-logo" src="assets/logos/playwright.svg" alt="">
+        <div>
+          <div class="row-name">playwright MCP <span class="row-type">mcp</span></div>
+          <p class="row-why">Gives the agent eyes. Every design loop depends on it; the highest-leverage single install for visual work.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/microsoft/playwright-mcp" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">10<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="obra/superpowers skill-pack the process backbone: brainstorming gates, test-driven loops, verification-before-completion. discipline as an install.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">obra/superpowers <span class="row-type">skill-pack</span></div>
+          <p class="row-why">The process backbone: brainstorming gates, test-driven loops, verification-before-completion. Discipline as an install.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/obra/superpowers" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">9<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="humanizer skill strips ai-writing tells systematically. the difference between content people read and content people clock.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">humanizer <span class="row-type">skill</span></div>
+          <p class="row-why">Strips AI-writing tells systematically. The difference between content people read and content people clock.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://skills.sh" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">9<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="remotion skill skill video as react code: the only path where a coding agent controls every frame, which makes the design loop possible for video.">
+        <img class="row-logo" src="assets/logos/remotion.svg" alt="">
+        <div>
+          <div class="row-name">remotion skill <span class="row-type">skill</span></div>
+          <p class="row-why">Video as React code: the only path where a coding agent controls every frame, which makes the design loop possible for video.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://www.remotion.dev" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">9<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="anthropics/skills: pptx plugin-skill real powerpoint generation that survives editing afterward; the deck harness's production layer.">
+        <img class="row-logo" src="assets/logos/anthropic.svg" alt="">
+        <div>
+          <div class="row-name">anthropics/skills: pptx <span class="row-type">plugin-skill</span></div>
+          <p class="row-why">Real PowerPoint generation that survives editing afterward; the deck harness's production layer.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/anthropics/skills" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">9<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="anthropics/skills: pdf + docx plugin-skill real document formats instead of markdown cosplay; the document harness's production layer.">
+        <img class="row-logo" src="assets/logos/anthropic.svg" alt="">
+        <div>
+          <div class="row-name">anthropics/skills: pdf + docx <span class="row-type">plugin-skill</span></div>
+          <p class="row-why">Real document formats instead of markdown cosplay; the document harness's production layer.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/anthropics/skills" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">9<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="ffmpeg cli every video path terminates in ffmpeg: concat, mux, convert, extract stills for the frame loop.">
+        <img class="row-logo" src="assets/logos/ffmpeg.svg" alt="">
+        <div>
+          <div class="row-name">ffmpeg <span class="row-type">cli</span></div>
+          <p class="row-why">Every video path terminates in ffmpeg: concat, mux, convert, extract stills for the frame loop.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://ffmpeg.org" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">9<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="agent-reach skill 15-platform reach (x, reddit, youtube, linkedin, xiaohongshu...): pulls the community layer most research runs silently skip.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">agent-reach <span class="row-type">skill</span></div>
+          <p class="row-why">15-platform reach (X, Reddit, YouTube, LinkedIn, xiaohongshu...): pulls the community layer most research runs silently skip.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/hyz217/agent-reach" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="wshobson/agents agent-pack battle-tested subagent patterns for parallel sweeps and synthesis; the research harness's fan-out layer.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">wshobson/agents <span class="row-type">agent-pack</span></div>
+          <p class="row-why">Battle-tested subagent patterns for parallel sweeps and synthesis; the research harness's fan-out layer.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/wshobson/agents" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="gsap skills (core + scrolltrigger) skill-pack motion that feels engineered. the gap between a static ai page and a site with craft is usually motion.">
+        <img class="row-logo" src="assets/logos/greensock.svg" alt="">
+        <div>
+          <div class="row-name">GSAP skills (core + ScrollTrigger) <span class="row-type">skill-pack</span></div>
+          <p class="row-why">Motion that feels engineered. The gap between a static AI page and a site with craft is usually motion.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://gsap.com" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="context7 mcp mcp current library docs on demand; stops the agent from writing against a framework version that no longer exists.">
+        <img class="row-logo" src="assets/logos/upstash.svg" alt="">
+        <div>
+          <div class="row-name">context7 MCP <span class="row-type">mcp</span></div>
+          <p class="row-why">Current library docs on demand; stops the agent from writing against a framework version that no longer exists.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/upstash/context7" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="vercel deploy (cli or mcp) platform the shortest reliable path from local build to live url; the ship phase's default.">
+        <img class="row-logo" src="assets/logos/vercel.svg" alt="">
+        <div>
+          <div class="row-name">Vercel deploy (CLI or MCP) <span class="row-type">platform</span></div>
+          <p class="row-why">The shortest reliable path from local build to live URL; the ship phase's default.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://vercel.com" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="skills.sh registry registry the install rail everything ships on, with install-count leaderboards. popularity signal only; our ratings layer sits on top of it.">
+        <img class="row-logo" src="assets/logos/vercel.svg" alt="">
+        <div>
+          <div class="row-name">skills.sh registry <span class="row-type">registry</span></div>
+          <p class="row-why">The install rail everything ships on, with install-count leaderboards. Popularity signal only; our ratings layer sits on top of it.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://skills.sh" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="gemini image gen (vertex ai) api current best quality-per-cent for still generation (~$0.13/2k image); the visual pipeline default where a harness needs original imagery.">
+        <img class="row-logo" src="assets/logos/googlegemini.svg" alt="">
+        <div>
+          <div class="row-name">Gemini image gen (Vertex AI) <span class="row-type">api</span></div>
+          <p class="row-why">Current best quality-per-cent for still generation (~$0.13/2K image); the visual pipeline default where a harness needs original imagery.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://cloud.google.com/vertex-ai" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">8<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="elevenlabs tts api the ai-voiceover default: quality high enough that vo stops being the tell. costs money beyond free tier; the estimate flags it.">
+        <img class="row-logo" src="assets/logos/elevenlabs.svg" alt="">
+        <div>
+          <div class="row-name">ElevenLabs TTS <span class="row-type">api</span></div>
+          <p class="row-why">The AI-voiceover default: quality high enough that VO stops being the tell. Costs money beyond free tier; the estimate flags it.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://elevenlabs.io" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">7<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="spec-kit framework the biggest spec-driven-development framework (~80k stars). for software builds beyond our web-app scope; indexed so the composer can hand off when someone's real ask is 'build me an app'.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">spec-kit <span class="row-type">framework</span></div>
+          <p class="row-why">The biggest spec-driven-development framework (~80k stars). For software builds beyond our web-app scope; indexed so the composer can hand off when someone's real ask is 'build me an app'.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/github/spec-kit" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">7<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="davila7/claude-code-templates catalog ~1,000-component parts store (agents, commands, hooks, mcps) with a clean cli. our closest neighbor; useful raw material, no composition or process layer.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">davila7/claude-code-templates <span class="row-type">catalog</span></div>
+          <p class="row-why">~1,000-component parts store (agents, commands, hooks, MCPs) with a clean CLI. Our closest neighbor; useful raw material, no composition or process layer.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/davila7/claude-code-templates" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">7<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="firecrawl mcp mcp structured scraping for sweep lanes when plain fetch hits js-rendered walls. free tier exists; paid beyond.">
+        <img class="row-logo" src="assets/logos/firecrawl.png" alt="">
+        <div>
+          <div class="row-name">firecrawl MCP <span class="row-type">mcp</span></div>
+          <p class="row-why">Structured scraping for sweep lanes when plain fetch hits JS-rendered walls. Free tier exists; paid beyond.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/mendableai/firecrawl" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">7<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="lighthouse ci cli the ship gate's objective half: performance and accessibility scored, not vibed.">
+        <img class="row-logo" src="assets/logos/lighthouse.svg" alt="">
+        <div>
+          <div class="row-name">Lighthouse CI <span class="row-type">cli</span></div>
+          <p class="row-why">The ship gate's objective half: performance and accessibility scored, not vibed.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/GoogleChrome/lighthouse-ci" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">7<i>/10</i></div>
+      </div>
+
+      <div class="row" data-search="bmad-method framework persona-agent development methodology (~37k stars). powerful and heavy: hundreds of millions of tokens/week on real projects. indexed for awareness; we deliberately compose lighter.">
+        <img class="row-logo" src="assets/logos/github.svg" alt="">
+        <div>
+          <div class="row-name">BMAD-METHOD <span class="row-type">framework</span></div>
+          <p class="row-why">Persona-agent development methodology (~37k stars). Powerful and heavy: hundreds of millions of tokens/week on real projects. Indexed for awareness; we deliberately compose lighter.</p>
+          <div class="row-meta">verified 2026-08-13 &middot; <a href="https://github.com/bmadcode/BMAD-METHOD" style="color:var(--blue)">source</a></div>
+        </div>
+        <div class="row-score">6<i>/10</i></div>
+      </div></div>
+  </section>
+</main>
+
+<footer><div class="wrap foot-in">
+  <a class="logo" href="index.html" style="font-size:16px"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1D1D1D"/><rect x="7" y="9.5" width="13" height="3.4" rx="1.7" fill="#fff"/><rect x="9.5" y="14.3" width="15.5" height="3.4" rx="1.7" fill="#1D4ED8"/><rect x="7" y="19.1" width="13" height="3.4" rx="1.7" fill="#fff"/></svg>metaharness</a>
+  <div>built with its own website harness · <a href="https://github.com/prajval-kesireddy/meta-harness" style="color:var(--blue)">github</a></div>
+</div></footer>
+
+<script>
+  const panes = {harnesses: document.getElementById('pane-harnesses'), index: document.getElementById('pane-index')};
+  const tabs = [...document.querySelectorAll('.tab')];
+  function show(name){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    Object.entries(panes).forEach(([k,p]) => p.classList.toggle('active', k === name));
+    doSearch();
+  }
+  tabs.forEach(t => t.addEventListener('click', () => { show(t.dataset.tab); history.replaceState(null,'','#'+t.dataset.tab); }));
+  document.querySelectorAll('[data-nav]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.nav); }));
+  const h = location.hash.slice(1);
+  if (h === 'index') show('index');
+  else if (h && document.getElementById(h)) { show('harnesses'); setTimeout(()=>document.getElementById(h).scrollIntoView({behavior:'smooth'}), 60); }
+
+  const search = document.getElementById('search');
+  function doSearch(){
+    const q = search.value.trim().toLowerCase();
+    document.querySelectorAll('.pane.active [data-search]').forEach(el => {
+      el.classList.toggle('hidden', q !== '' && !el.dataset.search.includes(q));
+    });
+  }
+  search.addEventListener('input', doSearch);
+</script>
+</body>
+</html>

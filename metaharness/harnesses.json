@@ -1,5 +1,6 @@
 {
-  "_schema": "metaharness blueprint v1. Each use case: interview questions, estimator params (base_agent_hours * answer multipliers), external installs, MCP suggestions, and a process template in templates/.",
+  "_schema": "metaharness blueprint v2. Each use case: EXACTLY 3 interview questions, a staged process-engineering pipeline (stage, what happens, stack, which model, loop mechanics), estimator params (base_agent_hours * answer multipliers), external installs, MCPs, and a process template in templates/.",
+  "_model_doctrine": "Opus where taste and judgment concentrate (direction, narrative, verdicts). Sonnet for production and iteration loops (it follows a written checklist as well as Opus at a fifth of the burn). Haiku only for bulk mechanical passes. The composer states the model per stage; running everything on one model is the #2 harness mistake after over-installing skills.",
   "website": {
     "title": "Website",
     "tagline": "A designed, deployed website that does not look AI-generated.",
@@ -8,37 +9,48 @@
     "template": "templates/website.md",
     "questions": [
       {
-        "id": "scope",
-        "prompt": "Single page or multi-page?",
-        "options": [
-          {"key": "single", "label": "Single page (landing, portfolio one-pager)", "mult": 1.0, "addendum": "Scope: one page. Every design loop iteration re-audits the full page top to bottom."},
-          {"key": "multi", "label": "Multi-page (3-8 pages)", "mult": 2.3, "addendum": "Scope: multi-page. Add Phase 1b: sitemap + shared layout system BEFORE any page is designed. Design-loop the homepage to done first, extract the design system from it, then batch the inner pages against that system."},
-          {"key": "app", "label": "Web app (interactive, has state/auth/data)", "mult": 3.5, "addendum": "Scope: web app. Split the runbook: harness the UI shell with the design loop, but run features through the build-verify loop (tests first, then screenshot audit). Add a data phase: schema before UI."}
-        ]
-      },
-      {
         "id": "reference",
-        "prompt": "Is there an existing site whose look/feel you want to base this on? (paste URL, or 'none')",
+        "prompt": "Do you have any websites you want to copy or take inspiration from? (URLs, or 'none')",
         "freeform": true,
         "mult_if_set": 1.15,
-        "addendum_if_set": "Reference capture phase is ACTIVE. Before designing: open the reference site, screenshot desktop + mobile, extract its type scale, spacing rhythm, palette, and interaction patterns into DESIGN-NOTES.md. Steal the system, not the pixels: recreating it verbatim both risks copyright and reads as a knockoff."
-      },
-      {
-        "id": "content",
-        "prompt": "Do you have the copy/content already, or should the agent write it?",
-        "options": [
-          {"key": "have", "label": "I have the content", "mult": 1.0, "addendum": "Content provided by user. Drop it into content/ before Phase 1 and treat it as immutable unless flagged."},
-          {"key": "write", "label": "Agent writes it", "mult": 1.3, "addendum": "Copywriting phase is ACTIVE (Phase 1a): voice interview answers -> draft copy -> humanize pass -> user-facing copy review gate BEFORE design starts. Design around real copy, never lorem ipsum."}
+        "addendum_if_set": "Reference capture stage is ACTIVE. Before designing: drive a browser to each reference site, screenshot desktop + mobile, pull its real type scale, spacing rhythm, palette, and interaction patterns into DESIGN-NOTES.md (computed styles, never eyeballing). Steal the system, not the pixels: recreating it verbatim risks copyright and reads as a knockoff.",
+        "installs_if_set": [
+          {"cmd": "claude mcp add firecrawl -- npx -y firecrawl-mcp", "why": "Reference stealing, part 2: structured extraction of the inspiration site's content architecture where plain fetch hits JS walls. Installed ONLY because you gave a reference URL."}
         ]
       },
       {
-        "id": "deploy",
-        "prompt": "Deploy where?",
+        "id": "scope",
+        "prompt": "What type of site? (single page, multi-page, or a web app)",
         "options": [
-          {"key": "vercel", "label": "Vercel/Netlify (recommended)", "mult": 1.1, "addendum": "Deploy target: Vercel or Netlify. Final phase deploys, then re-runs the screenshot audit against the LIVE url (fonts and images break in prod more than anywhere else).", "fills": {"DEPLOY_STEP": "Deploy to Vercel or Netlify, confirm the deployment succeeded, and get the live URL."}},
-          {"key": "local", "label": "Just local files for now", "mult": 1.0, "addendum": "No deploy this run. Final phase produces a build folder and a one-command deploy note for later.", "fills": {"DEPLOY_STEP": "Produce the final build folder and write a one-command deploy note for later."}}
+          {"key": "single", "label": "Single page (landing, portfolio one-pager)", "mult": 1.0, "addendum": "Scope: one page. Every design loop iteration re-audits the full page top to bottom."},
+          {"key": "multi", "label": "Multi-page (3-8 pages)", "mult": 2.3, "addendum": "Scope: multi-page. Add a sitemap + shared layout system stage BEFORE any page is designed. Design-loop the homepage to done first, extract the design system from it, then batch the inner pages against that system with one implementation subagent per page."},
+          {"key": "app", "label": "Web app (interactive, has state/auth/data)", "mult": 3.5, "addendum": "Scope: web app. Split the runbook: harness the UI shell with the design loop, run features through the build-verify loop (tests first, then screenshot audit). Add a data stage: schema before UI."}
         ]
+      },
+      {
+        "id": "assets",
+        "prompt": "Do you already have visual assets (logo, photos, illustrations), or should they be generated?",
+        "options": [
+          {"key": "have", "label": "Have assets", "mult": 1.0, "addendum": "Assets provided. Drop them into assets/ before building; the design system extracts palette and style anchors FROM them so the site matches the assets instead of fighting them."},
+          {"key": "generate", "label": "Generate them for me", "mult": 1.3, "addendum": "Asset generation stage ACTIVE: define ONE style anchor (palette, lighting, composition rules) before any image is generated, then produce all visuals against it with the current best image stack; audit each at the size it will actually render. Image generation bills outside the Claude plan; the estimate flags it.", "installs_if_set": [{"cmd": "See INSTALL.md registry picks: current best image-gen stack (Gemini image gen on Vertex AI free credits, or Higgsfield credits)", "why": "Installed ONLY because assets need generating. One style anchor, then batch; per-image one-offs drift."}]}
+        ]
+      },
+      {
+        "id": "extras",
+        "prompt": "What else do you want? (anything: copy written for you, a specific vibe, dark mode, a form, 'nothing')",
+        "freeform": true,
+        "mult_if_set": 1.25,
+        "addendum_if_set": "Extra requirements captured below. Fold each into the relevant pipeline stage and add a checklist line per item; unless stated otherwise the agent writes the copy (voice interview -> draft -> humanize pass -> copy review gate before design)."
       }
+    ],
+    "pipeline": [
+      {"stage": "Taste lock", "what": "Art direction in words: type pairing, palette, layout personality, one signature move. Reference capture if a URL was given.", "stack": "frontend-design skill + playwright MCP (reference screenshots, computed styles)", "model": "opus", "loop": "user gate: 2-minute skim of DESIGN-NOTES.md"},
+      {"stage": "Copy", "what": "Final human-quality prose before any layout exists.", "stack": "humanizer skill", "model": "opus", "loop": "de-slop loop until nothing reads machine-written"},
+      {"stage": "Type & tokens", "what": "Font pairing loaded and proofed at real sizes; spacing scale and color system locked as CSS tokens.", "stack": "frontend-design skill + Google Fonts", "model": "opus", "loop": "one render-and-squint pass"},
+      {"stage": "Build", "what": "Semantic structure, mobile-first, real content. Multi-page: one subagent per page against the locked system.", "stack": "Claude Code subagents", "model": "sonnet", "loop": "build-verify per unit"},
+      {"stage": "Design loop", "what": "Screenshot 1440px and 390px, audit against the written checklist, fix top 3, repeat.", "stack": "playwright MCP", "model": "sonnet", "loop": "to convergence, cap 6 rounds"},
+      {"stage": "Motion", "what": "Scroll reveals, hover states, one signature interaction; reduced-motion respected.", "stack": "GSAP core + ScrollTrigger skills", "model": "sonnet", "loop": "one design-loop round after (motion breaks layout)"},
+      {"stage": "Verify & ship", "what": "Lighthouse 90+, deploy, re-audit the LIVE url.", "stack": "Lighthouse + Vercel/Netlify", "model": "sonnet", "loop": "evidence before any done claim"}
     ],
     "installs": [
       {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install frontend-design", "why": "Anthropic's own frontend-design skill: kills the generic AI aesthetic at the token level (typography, spacing, color discipline)."},
@@ -46,7 +58,7 @@
       {"cmd": "npx skills add nextlevelbros/gsap-skills", "why": "GSAP core + ScrollTrigger skills, for motion that feels engineered instead of CSS-transition slop."}
     ],
     "mcps": [
-      {"name": "playwright", "cmd": "claude mcp add playwright -- npx -y @playwright/mcp@latest", "why": "The screenshot-audit loop needs a browser the agent can drive. This is the single highest-leverage install in the whole harness: without it the agent designs blind."}
+      {"name": "playwright", "cmd": "claude mcp add playwright -- npx -y @playwright/mcp@latest", "why": "The screenshot-audit loop needs a browser the agent can drive, and reference capture needs computed styles. The single highest-value install in the whole harness: without it the agent designs blind."}
     ]
   },
   "video": {
@@ -70,7 +82,7 @@
         "prompt": "Target length?",
         "options": [
           {"key": "short", "label": "Under 60 seconds", "mult": 1.0, "addendum": "Length: under 60s. One narrative beat, one CTA. Cut anything that delays the point past second 3."},
-          {"key": "medium", "label": "1-3 minutes", "mult": 1.6, "addendum": "Length: 1-3 min. Script phase must produce a beat sheet (6-10 beats); each beat is its own render-audit unit."},
+          {"key": "medium", "label": "1-3 minutes", "mult": 1.6, "addendum": "Length: 1-3 min. Script stage must produce a beat sheet (6-10 beats); each beat is its own render-audit unit."},
           {"key": "long", "label": "3-10 minutes", "mult": 2.8, "addendum": "Length: 3-10 min. This is a real production. Script gate + storyboard gate are both user-facing checkpoints before any rendering starts."}
         ]
       },
@@ -84,12 +96,20 @@
         ]
       }
     ],
+    "pipeline": [
+      {"stage": "Script & beats", "what": "Beat sheet: timestamp budget, visual, VO/text line, purpose per beat. De-slopped.", "stack": "humanizer skill", "model": "opus", "loop": "user gate on SCRIPT.md"},
+      {"stage": "Style frames", "what": "One designed still per key beat locks the look before motion exists.", "stack": "Remotion skill (or image-gen style anchors on the gen-AI path)", "model": "opus", "loop": "audit stills at phone size"},
+      {"stage": "Production", "what": "One test beat end to end, then all beats.", "stack": "Remotion / shot-prompt kit / ffmpeg cut list per path", "model": "sonnet", "loop": "test unit gate before scaling"},
+      {"stage": "Frame loop", "what": "Extract stills at every beat boundary, audit composition + legibility + continuity, re-render affected beats.", "stack": "ffmpeg stills", "model": "sonnet", "loop": "to convergence, cap 6 rounds"},
+      {"stage": "Audio & pacing", "what": "VO/music placed, levels sane (-14 LUFS for social), cuts land on beats, attention-drop moments tightened.", "stack": "ffmpeg + TTS where configured", "model": "sonnet", "loop": "full watch-through per round"},
+      {"stage": "Final render & verify", "what": "Target-res render + phone-preview render; play the actual file, spot-check sync at 3 points.", "stack": "Remotion/ffmpeg", "model": "sonnet", "loop": "evidence: stills strip + duration probe"}
+    ],
     "installs": [
       {"cmd": "npx skills add remotion-dev/skills", "why": "Official Remotion best-practices skill: video-in-React idioms, composition structure, render pipeline."},
       {"cmd": "npx skills add obra/superpowers", "why": "Verification gates: never claim a render is done without checking the actual output file."}
     ],
     "mcps": [
-      {"name": "ffmpeg (CLI, not MCP)", "cmd": "winget install ffmpeg  (or: brew install ffmpeg)", "why": "Every path ends in ffmpeg: concat, audio mux, format conversion, thumbnail extraction for audits."}
+      {"name": "ffmpeg (CLI, not MCP)", "cmd": "winget install ffmpeg  (or: brew install ffmpeg)", "why": "Every path ends in ffmpeg: concat, audio mux, format conversion, still extraction for audits."}
     ]
   },
   "pitch-deck": {
@@ -120,10 +140,17 @@
         "id": "brand",
         "prompt": "Existing brand (colors/fonts/logo), or create one?",
         "options": [
-          {"key": "have", "label": "Have brand assets", "mult": 1.0, "addendum": "Brand provided. Drop assets into brand/ first; the system phase extracts exact hex/type values from them, never approximates."},
+          {"key": "have", "label": "Have brand assets", "mult": 1.0, "addendum": "Brand provided. Drop assets into brand/ first; the system stage extracts exact hex/type values from them, never approximates."},
           {"key": "create", "label": "Create a look for this deck", "mult": 1.2, "addendum": "Brand creation ACTIVE: pick one typeface pair + 3-color system + one signature visual motif before slide 1 is designed. The motif is what makes the deck memorable; enforce it on every slide."}
         ]
       }
+    ],
+    "pipeline": [
+      {"stage": "Narrative", "what": "The deck as a 10-15 sentence story, one takeaway sentence per future slide, evidence named per claim.", "stack": "plain reasoning, no slides allowed yet", "model": "opus", "loop": "user gate on flagged hollow claims"},
+      {"stage": "System & heroes", "what": "Slide system (type pair, 3 colors, grid, motif) + the 3 hardest slides designed first.", "stack": "pptx skill, render-to-image", "model": "opus", "loop": "design loop on the 3 heroes"},
+      {"stage": "Batch build", "what": "Every remaining slide strictly against the system; honest-chart rules on all data.", "stack": "pptx skill", "model": "sonnet", "loop": "build-verify per slide"},
+      {"stage": "Consistency loop", "what": "All slides rendered as one strip; cross-slide alignment drift is the machine-deck tell.", "stack": "render-to-image audit", "model": "sonnet", "loop": "to convergence"},
+      {"stage": "Export & verify", "what": "Open the real exported file, fonts intact, headlines read as a story in order.", "stack": "pptx/PDF export", "model": "sonnet", "loop": "evidence: rendered slide strip"}
     ],
     "installs": [
       {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install pptx", "why": "Anthropic's pptx skill: programmatic PowerPoint generation that survives real-world editing afterward."},
@@ -142,7 +169,7 @@
         "id": "kind",
         "prompt": "What kind of document?",
         "options": [
-          {"key": "report", "label": "Report / whitepaper (research-backed)", "mult": 1.3, "addendum": "Research-backed report: the research phase runs BEFORE outlining, with a source ledger (every claim maps to a source). Unverifiable claims get cut or flagged, never smoothed over."},
+          {"key": "report", "label": "Report / whitepaper (research-backed)", "mult": 1.3, "addendum": "Research-backed report: the research stage runs BEFORE outlining, with a source ledger (every claim maps to a source). Unverifiable claims get cut or flagged, never smoothed over."},
           {"key": "ebook", "label": "Ebook / guide (teaching something)", "mult": 1.5, "addendum": "Ebook path: chapter map gate first. Each chapter is drafted, humanized, and typeset as its own loop unit so quality doesn't decay in later chapters (the classic long-doc failure)."},
           {"key": "proposal", "label": "Proposal / one-pager / memo", "mult": 0.7, "addendum": "Short-doc path: single draft-review-typeset cycle, but the review gate is stricter: every paragraph must either inform a decision or get cut."}
         ]
@@ -165,6 +192,14 @@
           {"key": "md", "label": "Markdown / web", "mult": 0.9, "addendum": "Markdown output: typeset loop is lighter; focus shifts to structure and prose quality."}
         ]
       }
+    ],
+    "pipeline": [
+      {"stage": "Reader & skeleton", "what": "Define the reader, then every section with its one-sentence takeaway and target length.", "stack": "outline only, no prose", "model": "opus", "loop": "user gate on OUTLINE.md"},
+      {"stage": "Research", "what": "Runs before drafting when research-backed: source ledger, claim->source->date.", "stack": "research loop, parallel sweep subagents", "model": "sonnet", "loop": "two dry rounds to exit"},
+      {"stage": "Voice anchor", "what": "The hardest section drafted first and de-slopped until genuinely human; its patterns extracted to VOICE.md.", "stack": "humanizer skill", "model": "opus", "loop": "de-slop to convergence"},
+      {"stage": "Batch draft", "what": "Remaining sections one at a time against VOICE.md; fresh session per section past 10 pages.", "stack": "humanizer per section", "model": "sonnet", "loop": "draft -> de-slop -> claims check per section"},
+      {"stage": "Whole-doc pass", "what": "Full read as the defined reader: transitions, repeats, voice drift, payoff placement.", "stack": "read-aloud audit", "model": "opus", "loop": "one pass + targeted fixes"},
+      {"stage": "Typeset & ship", "what": "Render every page to image, audit margins/orphans/figures, fix, re-render.", "stack": "pdf/docx skills, HTML-to-PDF", "model": "sonnet", "loop": "to convergence"}
     ],
     "installs": [
       {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install pdf && claude plugin install docx", "why": "Anthropic's document skills: real .docx/.pdf generation instead of markdown-pretending-to-be-a-document."},
@@ -196,7 +231,23 @@
           {"key": "social", "label": "Community/social too (Reddit, X, HN, YouTube)", "mult": 1.3, "addendum": "Community sourcing ACTIVE: practitioner takes from Reddit/X/HN/YouTube get their own sweep. These are opinions, not facts; the ledger tags them as sentiment and weights by corroboration."},
           {"key": "academic", "label": "Academic/technical papers", "mult": 1.4, "addendum": "Academic sourcing ACTIVE: arXiv/Scholar sweep, citation-chase the 3 most load-bearing papers, and separate what the paper shows from what the abstract claims."}
         ]
+      },
+      {
+        "id": "form",
+        "prompt": "What form should the answer take?",
+        "options": [
+          {"key": "memo", "label": "Tight memo (1-2 pages, answer first)", "mult": 1.0, "addendum": "Memo form: conclusion in the first three sentences, receipts behind it, appendix ledger."},
+          {"key": "scored", "label": "Scored recommendation (criteria table)", "mult": 1.1, "addendum": "Scored form: weighted criteria table drives the verdict; every score cites its ledger line."},
+          {"key": "full", "label": "Full report (publishable)", "mult": 1.4, "addendum": "Full-report form: routes the writing through the document harness's voice-anchor and typeset stages after synthesis."}
+        ]
       }
+    ],
+    "pipeline": [
+      {"stage": "Question discipline", "what": "Falsifiable restatement, sub-questions, sweep lanes, expected findings written BEFORE searching.", "stack": "RESEARCH-PLAN.md", "model": "opus", "loop": "none; this is the aim step"},
+      {"stage": "Sweep rounds", "what": "Every lane in parallel, each blind to the others; findings logged to the source ledger; gap question re-sweeps.", "stack": "parallel subagents + agent-reach for community lanes", "model": "sonnet", "loop": "until 2 consecutive dry rounds"},
+      {"stage": "Adversarial verify", "what": "Every load-bearing claim gets a refutation attempt: counter-search, incentive check, date check.", "stack": "refuter subagents, one per claim", "model": "sonnet", "loop": "CONFIRMED / CONTESTED / UNVERIFIABLE per claim"},
+      {"stage": "Synthesis", "what": "Answer first with confidence levels, then reasoning, then receipts. De-slopped.", "stack": "humanizer skill", "model": "opus", "loop": "de-slop pass"},
+      {"stage": "Completeness critic", "what": "One fresh pass: what angle, source type, or stakeholder did we never look at?", "stack": "fresh-context critic", "model": "opus", "loop": "loops back to sweeps if material"}
     ],
     "installs": [
       {"cmd": "npx skills add wshobson/agents", "why": "Research-agent patterns: parallel sweep + synthesis subagent structures."},
@@ -215,8 +266,8 @@
         "id": "stage",
         "prompt": "Where are you?",
         "options": [
-          {"key": "idea", "label": "Just an idea", "mult": 1.3, "addendum": "Idea stage: Phase 0 (positioning interrogation) is the longest phase. The harness forces a falsifiable customer hypothesis and a kill criterion before anything gets built. Building before positioning is the #1 way founders burn a weekend."},
-          {"key": "offer", "label": "Know my offer, need the machine", "mult": 1.0, "addendum": "Offer known: Phase 0 compresses to a positioning one-pager gate, then straight into brand + landing + outreach in parallel."},
+          {"key": "idea", "label": "Just an idea", "mult": 1.3, "addendum": "Idea stage: positioning interrogation is the longest stage. The harness forces a falsifiable customer hypothesis and a kill criterion before anything gets built. Building before positioning is the #1 way founders burn a weekend."},
+          {"key": "offer", "label": "Know my offer, need the machine", "mult": 1.0, "addendum": "Offer known: positioning compresses to a one-pager gate, then straight into brand + landing + outreach in parallel."},
           {"key": "selling", "label": "Already selling, need to look real + scale outreach", "mult": 0.9, "addendum": "Already selling: skip validation, mine existing customers for voice-of-customer language first (it becomes the landing copy), then scale the outreach system."}
         ]
       },
@@ -224,11 +275,26 @@
         "id": "motion",
         "prompt": "How will you get customers first?",
         "options": [
-          {"key": "outbound", "label": "Cold outreach (email/DM)", "mult": 1.2, "addendum": "Outbound motion: list-building phase ACTIVE (free-tier stack: search-only discovery, cheap enrichment, never burn paid credits where a free tier exists), plus a 3-touch sequence with a reply-handling playbook."},
-          {"key": "content", "label": "Content / social", "mult": 1.2, "addendum": "Content motion: the outreach phase swaps to a 30-day content engine (see the social-content harness; this run generates its starter kit: pillars, hooks bank, first week's posts)."},
-          {"key": "ads", "label": "Paid ads", "mult": 1.1, "addendum": "Paid motion: landing page phase adds conversion instrumentation and 2 headline/hero variants for testing; ad copy kit generated against the same positioning doc."}
+          {"key": "outbound", "label": "Cold outreach (email/DM)", "mult": 1.2, "addendum": "Outbound motion: list-building stage ACTIVE (free-tier stack: search-only discovery, cheap enrichment, never burn paid credits where a free tier exists), plus a 3-touch sequence with a reply-handling playbook."},
+          {"key": "content", "label": "Content / social", "mult": 1.2, "addendum": "Content motion: the outreach stage swaps to a 30-day content engine (see the social-content harness; this run generates its starter kit: pillars, hooks bank, first week's posts)."},
+          {"key": "ads", "label": "Paid ads", "mult": 1.1, "addendum": "Paid motion: landing page stage adds conversion instrumentation and 2 headline/hero variants for testing; ad copy kit generated against the same positioning doc."}
+        ]
+      },
+      {
+        "id": "speed",
+        "prompt": "Weekend sprint, or steady build?",
+        "options": [
+          {"key": "sprint", "label": "Weekend sprint (live by Monday)", "mult": 1.0, "addendum": "Sprint mode: scope ruthlessly to positioning + one-page landing + 50-contact outreach machine. Everything else goes on the after-launch list."},
+          {"key": "steady", "label": "Steady build (2-4 weeks)", "mult": 1.4, "addendum": "Steady mode: adds the fuller brand kit, multi-page site, and a second acquisition channel warmed up in parallel."}
         ]
       }
+    ],
+    "pipeline": [
+      {"stage": "Positioning interrogation", "what": "Buyer, pain in the buyer's words, offer, price hypothesis, kill criterion. Assumptions flagged.", "stack": "brainstorming skill + quick market research loop", "model": "opus", "loop": "user gate on POSITIONING.md"},
+      {"stage": "Brand kit", "what": "Name shortlist with collision checks, wordmark, palette, type pair, de-slopped one-liner.", "stack": "image gen for marks (Gemini/Vertex)", "model": "opus", "loop": "restraint audit: would it survive print?"},
+      {"stage": "Landing page", "what": "The website harness pipeline runs nested here with POSITIONING.md as copy source.", "stack": "frontend-design + playwright MCP", "model": "sonnet", "loop": "full design loop"},
+      {"stage": "Customer machine", "what": "Per motion: outbound list + 3-touch sequence, or content starter kit, or ads kit. All copy de-slopped.", "stack": "humanizer + free-tier discovery stack", "model": "sonnet", "loop": "de-slop per asset; AI-sounding outreach is deleted on sight"},
+      {"stage": "Launch runbook", "what": "Day-by-day operator instructions, kill-criterion triggers, honest-gaps section.", "stack": "LAUNCH-WEEK.md", "model": "opus", "loop": "verify every asset exists before handoff"}
     ],
     "installs": [
       {"cmd": "claude plugin marketplace add anthropics/skills && claude plugin install frontend-design", "why": "The landing page leg runs the website harness's design loop."},
@@ -262,7 +328,23 @@
           {"key": "yes", "label": "Yes, I'll share winners", "mult": 1.1, "addendum": "Winners provided: extract the actual patterns (structure, length, hook type, topic angle) from them into VOICE.md before generating anything. Generate to the pattern, not to vibes."},
           {"key": "no", "label": "No, fresh start", "mult": 1.0, "addendum": "Fresh start: study 5 top accounts in the niche instead (public posts only), extract what performs, and A/B the first week across 2 styles to find the lane."}
         ]
+      },
+      {
+        "id": "goal",
+        "prompt": "What's the account actually for?",
+        "options": [
+          {"key": "audience", "label": "Grow an audience", "mult": 1.0, "addendum": "Audience goal: pillars weight toward shareable takes and format experiments; the weekly loop reads reach and saves, and feeds winners back."},
+          {"key": "sales", "label": "Drive sales/leads", "mult": 1.1, "addendum": "Sales goal: every pillar maps to a buying objection or desire; CTA cadence set (1 in 4 posts max); the weekly loop reads replies and profile clicks, never vanity reach."},
+          {"key": "authority", "label": "Build authority in a niche", "mult": 1.0, "addendum": "Authority goal: pillars weight toward receipts (numbers, cases, teardowns) over takes; consistency beats virality and the calendar reflects that."}
+        ]
       }
+    ],
+    "pipeline": [
+      {"stage": "Pattern research", "what": "Extract what actually performs: user's winners, or 5 top accounts in the niche.", "stack": "agent-reach (platform pulls)", "model": "sonnet", "loop": "patterns logged with why-it-works per entry"},
+      {"stage": "Pillars & hooks", "what": "3-4 pillars tied to the goal; 30+ hooks written, bottom third killed.", "stack": "cold-scroller audit", "model": "opus", "loop": "user gate on pillars"},
+      {"stage": "Batch posts", "what": "30 days drafted in week batches; per post: de-slop + platform-native audit.", "stack": "humanizer per post", "model": "sonnet", "loop": "week-set re-read for repetition drift"},
+      {"stage": "Visuals", "what": "One style anchor, then per-post images audited at phone size.", "stack": "Gemini image gen (Vertex)", "model": "sonnet", "loop": "consistency audit across the set"},
+      {"stage": "Operating loop", "what": "Calendar + the 30-minute weekly ritual: approve, read numbers, feed winners back.", "stack": "WEEKLY-LOOP.md", "model": "haiku", "loop": "weekly, forever"}
     ],
     "installs": [
       {"cmd": "npx skills add blader/humanizer", "why": "Every post ships through the de-slop pass. This single install is most of the difference between posting AI content and posting content."},
@@ -302,6 +384,13 @@
           {"key": "invest", "label": "Market sizing / is this market real?", "mult": 1.3, "addendum": "Market-reality decision: traction receipts become mandatory per competitor (funding, pricing, hiring, release cadence, community pulse), and the synthesis grades market heat honestly, including 'this market is a graveyard' if the receipts say so."}
         ]
       }
+    ],
+    "pipeline": [
+      {"stage": "Market frame", "what": "Decision-relevant axes (never generic feature grids), sweep lanes incl. the last-90-days freshness lane.", "stack": "MARKET-FRAME.md", "model": "opus", "loop": "none; aim step"},
+      {"stage": "Discovery sweeps", "what": "Every lane in parallel: sites, GitHub velocity, ProductHunt/HN, app stores, community threads, review sites.", "stack": "parallel subagents + agent-reach", "model": "sonnet", "loop": "until 2 consecutive dry rounds"},
+      {"stage": "Verify & profile", "what": "Fetch each survivor's actual site/repo: positioning verbatim, pricing, traction receipts, 2-3 real threads. Kill the dead and misremembered.", "stack": "one verification subagent per competitor", "model": "sonnet", "loop": "CONFIRMED with fetch date, per profile"},
+      {"stage": "Gap mining", "what": "The complaint surface across all competitors: what buyers keep asking for that nobody ships.", "stack": "cross-profile synthesis", "model": "opus", "loop": "one pass"},
+      {"stage": "Verdict", "what": "Decision answered first with confidence; map; profiles; differentiation surface; the honest where-you-lose section.", "stack": "humanizer + completeness critic", "model": "opus", "loop": "critic asks which lane would change the verdict"}
     ],
     "installs": [
       {"cmd": "npx skills add hyz217/agent-reach", "why": "The sentiment lanes: what Reddit/X/HN actually say about each competitor, which their landing pages will never tell you."},
