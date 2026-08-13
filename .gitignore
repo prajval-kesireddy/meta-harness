@@ -4,7 +4,8 @@ node_modules/
 .DS_Store
 _audit_*.png
 _crop_*.png
-*.mp4
+promo/*.mp4
+promo/out/*.mp4
 promo/node_modules/
 promo/out/
 site/_audit.py
