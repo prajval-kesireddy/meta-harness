@@ -1,0 +1,30 @@
+{
+  "use_case": "video",
+  "answers": {
+    "kind": "explainer",
+    "length": "short",
+    "voiceover": "none"
+  },
+  "multiplier": 1.0,
+  "estimate": {
+    "agent_hours": [
+      2.4,
+      5.6
+    ],
+    "plan_pct": {
+      "pro": [
+        3.0624999999999996,
+        14.0
+      ],
+      "max5x": [
+        0.8749999999999999,
+        4.0
+      ],
+      "max20x": [
+        0.5104166666666666,
+        2.3333333333333335
+      ]
+    }
+  },
+  "generated": "2026-08-13"
+}

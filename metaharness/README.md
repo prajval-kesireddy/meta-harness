@@ -2,7 +2,7 @@
 
 Give your AI the intuition of the best in the world at any task.
 
-Great AI output was never about the prompt. It's the harness: which skills are installed, how the work loops, what gets verified before "done." The people getting jaw-dropping results from the same models you use have simply engineered that layer, and almost nobody else knows it exists. metaharness asks you two or three questions about the outcome you want, then composes that layer for you: the exact skills and tools worth installing (from a rated, daily-refreshed index of the whole ecosystem, never from stale defaults), the process runbook the best practitioners actually follow, the verification loops that catch slop before you see it, and an honest estimate of how much of your Claude plan's weekly usage the run will burn.
+A layer sits between your prompt and great output: the harness. Which skills are installed, how the work loops, what gets verified before "done." The people getting jaw-dropping results from the same models you use have simply engineered that layer, and almost nobody else knows it exists. metaharness asks you two or three questions about the outcome you want, then composes that layer for you: the exact skills and tools worth installing (from a rated, daily-refreshed index of the whole ecosystem, never from stale defaults), the process runbook the best practitioners actually follow, the verification loops that catch slop before you see it, and an honest estimate of how much of your Claude plan's weekly usage the run will burn.
 
 ## Quick start
 

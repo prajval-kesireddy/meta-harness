@@ -1,0 +1,31 @@
+{
+  "use_case": "website",
+  "answers": {
+    "scope": "single",
+    "reference": "none",
+    "content": "write",
+    "deploy": "local"
+  },
+  "multiplier": 1.3,
+  "estimate": {
+    "agent_hours": [
+      2.7,
+      6.2
+    ],
+    "plan_pct": {
+      "pro": [
+        3.4125,
+        15.600000000000003
+      ],
+      "max5x": [
+        0.975,
+        4.457142857142858
+      ],
+      "max20x": [
+        0.56875,
+        2.6000000000000005
+      ]
+    }
+  },
+  "generated": "2026-08-13"
+}

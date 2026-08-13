@@ -21,5 +21,16 @@ The real value of this product is analyzing the whole market: the latest and gre
 - 2026-08-13: Praj asked for the competitive landscape of this tool itself; keep COMPETITION.md current.
 - Form factor: a Claude Code plugin/skill pack plus a Python CLI, because the target user already runs Claude Code and the harness IS the .claude folder it generates.
 
+## Layout
+- `metaharness/` the product: metaharness.py CLI, harnesses.json (8 blueprints), templates/ (PROCESS-CORE + 8 process templates), registry/ (registry.json rated index, research_update.py daily scan, INBOX.md candidates).
+- `site/` public site: template.html + build_site.py (regenerates index.html from registry.json; rerun after registry edits). Served detached on port 8414 via serve.ps1 (pid file %TEMP%\claude-localhost-8414.pid). LAN: http://172.20.20.20:8414.
+- `promo/` Remotion promo video (SCRIPT.md beat sheet, src/, out/promo.mp4).
+- `COMPETITION.md` live competitive map.
+
+## Gotchas
+- Browser pane blocked raw localhost navigation; use preview_start with .claude/launch.json attach config, or headless Playwright (site/_audit.py) for design-loop screenshots.
+- Full-page Playwright screenshots show a phantom tint on some grid cards (stitching artifact); verify with computed styles before "fixing".
+- Remotion: hooks (useCurrentFrame etc.) must be called before any early return in a component or rendering dies with React #310 at random frames.
+
 ## Where we left off
-- 2026-08-13: workstream created, Stage 1 build starting.
+- 2026-08-13 ~05:00 EST: Stage 1 DONE and verified (CLI end-to-end, scan pulled 46 candidates on first run, committed). Stage 2: site built + design-looped + serving on 8414; promo video rendering. Next: rate the INBOX.md candidates into registry.json, Stage 3 distribution (push to GitHub when Praj says push, deploy site publicly with his OK, README badge/screenshots).

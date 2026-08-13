@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "metaharness-site",
+      "url": "http://localhost:8414",
+      "port": 8414
+    }
+  ]
+}

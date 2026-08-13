@@ -13,6 +13,10 @@ Subject: a tool that interviews you about the OUTCOME you want (website, video, 
 **Anthropic itself** — the platform risk. Claude Code already ships find-skills, plugin marketplaces, and native skill suggestions; Anthropic ships official skills (frontend-design, pptx, pdf, docx). If Anthropic builds outcome-based harness composition natively, the private tool becomes a feature. History says platforms absorb the generic version and leave the opinionated version alone.
 - Threat: STRUCTURAL. Mitigation: be the opinionated cross-ecosystem layer (skills + MCPs + non-Anthropic tools + process), move faster than a platform can.
 
+**Found by our own scan, 2026-08-13 (the manual sweep missed both):**
+- **garrytan/gstack** (~128k stars, pushed daily) — "Garry Tan's exact Claude Code setup": 23 opinionated tools packaged as CEO/Designer/Eng-Manager personas. Proof that OPINIONATED CURATION is what the market actually installs; a celebrity one-size harness, no outcome interview, dev-centric. Threat: HIGH on mindshare, and validation that prescriptive beats catalog.
+- **affaan-m/ECC** (~240k stars) — "agent harness performance optimization system": skills, instincts, memory, security for Claude Code/Codex. The phrase "agent harness" is going mainstream; the code-harness lane is filling fast. Non-code outcomes still open.
+
 ## Lane 2: Process frameworks (own "harness engineering" for code)
 
 - **GitHub spec-kit** (~80k stars) — spec-driven development, the biggest. Code only.

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>metaharness — the rated index of AI agent tooling, composed into harnesses</title>
+<meta name="description" content="metaharness asks what outcome you want, then installs the harness the best practitioners actually run, with the token bill stated up front.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EA; --paper-2:#F0EADC; --ink:#1C1710; --ink-muted:#6E6659;
+    --rule:#D8D0C0; --accent:#C93D1B;
+    --serif:"Source Serif 4",Georgia,serif;
+    --display:"Fraunces",Georgia,serif;
+    --mono:"IBM Plex Mono",Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.6}
+  a{color:var(--ink);text-decoration-color:var(--accent);text-underline-offset:3px}
+  a:hover{color:var(--accent)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+
+  header{border-bottom:1px solid var(--rule)}
+  .head-in{display:flex;justify-content:space-between;align-items:baseline;padding:20px 0}
+  .wordmark{font-family:var(--mono);font-weight:500;font-size:17px;letter-spacing:-.02em}
+  .wordmark b{color:var(--accent);font-weight:500}
+  nav{font-family:var(--mono);font-size:13px}
+  nav a{margin-left:22px;text-decoration:none}
+
+  .hero{padding:88px 0 72px}
+  .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(38px,6.2vw,68px);line-height:1.04;letter-spacing:-.015em;max-width:18ch;text-wrap:balance}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero-sub{max-width:58ch;margin-top:30px;font-size:19px}
+  .hero-sub + .hero-sub{margin-top:14px}
+  .cmd{display:block;margin-top:34px;font-family:var(--mono);font-size:13.5px;line-height:2;background:var(--ink);color:var(--paper);padding:16px 20px;border-radius:3px;overflow-x:auto;max-width:640px}
+  .cmd div{white-space:nowrap}
+  .cmd .p{color:#B9AE9C;user-select:none}
+  .hero-note{margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--ink-muted)}
+
+  section{padding:72px 0;border-top:1px solid var(--rule)}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,3.4vw,36px);letter-spacing:-.01em;max-width:24ch}
+  .lede{max-width:60ch;margin-top:18px}
+  .lede + .lede{margin-top:12px}
+
+  .uc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:40px}
+  .uc{background:var(--paper);padding:22px 20px 26px}
+  .uc:hover{background:var(--paper-2)}
+  .uc h3{font-family:var(--display);font-weight:600;font-size:20px}
+  .uc p{font-size:15px;color:var(--ink-muted);margin-top:8px;line-height:1.5}
+  .uc-est{font-family:var(--mono);font-size:12px;margin-top:14px;color:var(--ink)}
+
+  .index-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px}
+  .index-meta{font-family:var(--mono);font-size:12px;color:var(--ink-muted)}
+  .rows{margin-top:36px;border-top:1px solid var(--ink)}
+  .row{display:grid;grid-template-columns:56px 1fr 96px;gap:18px;padding:20px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .row:hover{background:var(--paper-2)}
+  .row-no{font-family:var(--mono);font-size:13px;color:var(--ink-muted);padding-top:6px}
+  .row-name{font-family:var(--display);font-weight:600;font-size:19px}
+  .row-type{font-family:var(--mono);font-size:11px;color:var(--ink-muted);margin-left:8px}
+  .row-why{font-size:15.5px;color:var(--ink-muted);margin-top:6px;max-width:64ch}
+  .row-meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-muted);margin-top:8px}
+  .row-score{font-family:var(--mono);font-weight:500;font-size:34px;text-align:right;line-height:1}
+  .row:hover .row-score{color:var(--accent)}
+  .row-score-of{font-size:13px;color:var(--ink-muted)}
+
+  table{border-collapse:collapse;margin-top:36px;font-size:16px;width:100%;max-width:640px}
+  th{font-family:var(--mono);font-size:12px;font-weight:500;text-align:left;color:var(--ink-muted);padding:0 28px 10px 0;border-bottom:1px solid var(--ink)}
+  td{padding:12px 28px 12px 0;border-bottom:1px solid var(--rule)}
+  td.num{font-family:var(--mono);font-size:14px}
+  .fine{font-size:14.5px;color:var(--ink-muted);margin-top:18px;max-width:60ch}
+
+  footer{border-top:1px solid var(--ink);padding:34px 0 60px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:12.5px;color:var(--ink-muted)}
+
+  .reveal{opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
+  @media (max-width:640px){
+    body{font-size:16.5px}
+    .hero{padding:56px 0 48px}
+    .row{grid-template-columns:1fr 64px}
+    .row-no{display:none}
+    .row-score{font-size:26px}
+    nav a{margin-left:14px}
+  }
+</style>
+</head>
+<body>
+
+<header><div class="wrap head-in">
+  <div class="wordmark">meta<b>harness</b></div>
+  <nav><a href="#index">the index</a><a href="#outcomes">outcomes</a><a href="https://github.com/prajval-kesireddy/meta-harness">github</a></nav>
+</div></header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <h1>Give your AI the intuition of <em>the best in the world</em> at any task.</h1>
+    <p class="hero-sub">A layer sits between your prompt and great output: the harness. Which skills are installed, how the work loops, what gets verified before the agent says done. The stunning results on your feed come from people who engineered that layer by hand.</p>
+    <p class="hero-sub">metaharness asks a few questions about the outcome you want, then composes that layer for you from a rated index of the whole ecosystem. The token bill is stated before you start.</p>
+    <div class="cmd"><div><span class="p">$ </span>git clone https://github.com/prajval-kesireddy/meta-harness</div><div><span class="p">$ </span>python meta-harness/metaharness/metaharness.py run website</div></div>
+    <div class="hero-note">runs anywhere Claude Code runs · stdlib only · no account</div>
+  </div>
+
+  <section id="outcomes">
+    <h2>Eight outcomes, each with its own harness.</h2>
+    <p class="lede">A harness here means the full working layer: the two or three skills genuinely worth installing (more makes agents worse), a phase-by-phase runbook with paste-ready prompts, iteration loops with written exit conditions, and verification gates that demand evidence before "done."</p>
+    <div class="uc-grid">{{USECASE_CARDS}}</div>
+  </section>
+
+  <section id="index">
+    <div class="index-head">
+      <h2>The rated index.</h2>
+      <div class="index-meta">{{ENTRY_COUNT}} entries · updated {{UPDATED}} · refreshed by a daily scan</div>
+    </div>
+    <p class="lede">Every directory ranks by stars or install counts, which measure marketing. These ratings answer a harder question: composed into a harness, does this tool measurably improve the outcome? A daily sweep of GitHub feeds new candidates in and flags anything going stale; nothing gets listed unrated.</p>
+    <div class="rows">{{INDEX_ROWS}}</div>
+  </section>
+
+  <section id="budget">
+    <h2>The bill, up front.</h2>
+    <p class="lede">Harness runs burn real plan usage, and pretending otherwise is how people end up rate-limited mid-project. Every composed harness states its estimate as a band. A single-page website with full design loops, for example:</p>
+    <table>
+      <tr><th>your plan</th><th>share of weekly usage</th></tr>
+      <tr><td>Claude Pro</td><td class="num">~3–16%</td></tr>
+      <tr><td>Claude Max 5x</td><td class="num">~1–4%</td></tr>
+      <tr><td>Claude Max 20x</td><td class="num">~1–3%</td></tr>
+    </table>
+    <p class="fine">Bands assume a Sonnet-heavy mix; Opus-heavy runs burn roughly five times faster. Media generation (video and image models) bills separately and every estimate says so where it applies.</p>
+  </section>
+
+</main>
+
+<footer><div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;padding:0">
+  <div>metaharness — built with its own website harness</div>
+  <div><a href="https://github.com/prajval-kesireddy/meta-harness">github.com/prajval-kesireddy/meta-harness</a></div>
+</div></footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), {threshold: .08});
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 6) * 60 + 'ms';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
