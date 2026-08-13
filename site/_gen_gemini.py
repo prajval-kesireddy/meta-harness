@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Batch 3: Gemini image gen on Vertex AI via ADC (per global playbook).
-Pairs with 25s sleep; single-target retry on 429. Saves to assets/img/g{N}.png.
+"""Pastel 2D card regeneration: Gemini on Vertex AI via ADC (global playbook).
+Pairs with 25s sleep; single retry pass on failures. Overwrites assets/img/hf2d_*.png.
 """
 import base64
 import json
@@ -14,52 +14,38 @@ from google.auth.transport.requests import Request
 PROJECT = "project-d1f08481-a42a-483b-804"
 LOCATION = "global"
 MODEL = "gemini-3-pro-image"
-HOST = "aiplatform.googleapis.com"
-URL = (f"https://{HOST}/v1/projects/{PROJECT}/locations/{LOCATION}"
+URL = (f"https://aiplatform.googleapis.com/v1/projects/{PROJECT}/locations/{LOCATION}"
        f"/publishers/google/models/{MODEL}:generateContent")
 
 OUT = Path(__file__).resolve().parent / "assets" / "img"
-OUT.mkdir(parents=True, exist_ok=True)
 
-ANCHOR = ("ultra-clean 3D render in the style of premium Framer fintech "
-          "templates: soft pastel dawn sky, lush rolling emerald-green hills, "
-          "pristine white engineered structures, high-key natural light, "
-          "minimal composition, no text, no words, no people. ")
+ANCHOR = ("premium flat 2D vector illustration for a modern fintech marketing site, "
+          "soft pastel rendering with BLUE as the clear lead color: powder blue, sky "
+          "blue, and cornflower blue dominate every scene, with tasteful small accents "
+          "of blush pink, butter yellow, and soft mint on a warm off-white background, "
+          "no purple, green never leads, gentle low-saturation tones, rounded "
+          "geometric shapes, subtle film grain, clean minimal composition, "
+          "no text, no words. ")
 
 PROMPTS = {
-    # Square card art for the 8 harness cards on the tool page
-    "g01_card_website": (ANCHOR + "square composition: robotic arms on a compact white assembly platform composing a glowing website screen from typography and image tiles", "1:1"),
-    "g02_card_video": (ANCHOR + "square composition: glowing film-frame cards riding a small white conveyor loop toward a white projector head", "1:1"),
-    "g03_card_deck": (ANCHOR + "square composition: a neat fan of glowing presentation slides held by a white mechanical easel", "1:1"),
-    "g04_card_document": (ANCHOR + "square composition: a white typesetting press pressing a glowing page, stacked finished pages beside it", "1:1"),
-    "g05_card_research": (ANCHOR + "square composition: a white telescope apparatus aimed at a floating constellation of tiny glowing catalog cards", "1:1"),
-    "g06_card_launch": (ANCHOR + "square composition: a small pristine white storefront kiosk with awning being assembled by two robotic arms", "1:1"),
-    "g07_card_social": (ANCHOR + "square composition: a tilted calendar grid of thirty small glowing tiles, a tiny white robot polishing one", "1:1"),
-    "g08_card_compete": (ANCHOR + "square composition: a white watchtower on a green rise overlooking terraced platforms holding miniature rival structures", "1:1"),
-    # Wide art
-    "g09_hero_alt": (ANCHOR + "vast wide shot: a white elevated pipeline of glowing panels sweeping an S-curve through hills to the horizon, generous empty sky above", "16:9"),
-    "g10_inputs_wide": (ANCHOR + "wide shot: three white pedestals evenly spaced on a green ridge holding a glowing compute cube, a vessel of golden energy, and a stack of glowing skill cards, the cards pedestal brightest", "16:9"),
-    "g11_resources": (ANCHOR + "wide shot: golden luminous credit coins cascading through elegant white glass piping across a meadow into a white collection vault", "16:9"),
-    "g12_scan_alt": (ANCHOR + "wide shot: white radar dish array at dawn on a hilltop, soft beams sweeping a valley of floating geometric artifacts", "16:9"),
-    "g13_gate_wide": (ANCHOR + "wide shot: a white inspection gate straddling a conveyor on green hills, emerald beacon glowing, panels queueing", "16:9"),
-    "g14_loop_wide": (ANCHOR + "wide shot: a white circular refinement loop conveyor on a hilltop, screens improving each pass, one exit ramp releasing a finished glowing screen", "16:9"),
-    "g15_dark_cta": ("ultra-clean 3D render, dark premium fintech aesthetic, deep indigo night over rolling hills, a warm glowing white slab monument in the center foreground with faint amber flow lines converging into it, stars, minimal, no text, no people", "16:9"),
-    "g16_og_card": (ANCHOR + "wide banner composition with the left half open empty meadow and soft sky for text overlay, right half a white pipeline curving away with glowing panels", "16:9"),
-    "g17_archive_macro": (ANCHOR + "macro close-up: one white catalogued block half-pulled from a white shelf, glowing edge, tiny vermilion wax seal, shallow depth of field", "16:9"),
-    "g18_fork_eight": (ANCHOR + "wide aerial: one white assembly line forking into eight branches across a valley, each branch ending at a distinct small white pavilion", "16:9"),
-    "g19_hero_tall": (ANCHOR + "vertical composition: a white pipeline of glowing panels climbing terraced green hills toward a bright dawn sky", "9:16"),
-    "g20_workflow_iso": (ANCHOR + "isometric view: a compact white factory diagram built as real architecture, five stations connected by conveyor paths with glowing pulses, on a green plateau", "16:9"),
-    # Variants for choice
-    "g21_hero_v3": (ANCHOR + "vast wide shot, low camera angle in wildflowers: white elevated conveyor pipeline overhead carrying glowing panels toward distant hills", "16:9"),
-    "g22_inputs_v2": (ANCHOR + "wide shot: three glass display cases in a row on a green ridge: a compute cube, flowing golden energy, and stacked glowing cards, the third case open with light spilling out", "16:9"),
-    "g23_dark_v2": ("ultra-clean 3D render, dark premium fintech aesthetic: night hills with an illuminated white flowchart network built across the terrain, soft amber pulses traveling the paths, stars, minimal, no text, no people", "16:9"),
-    "g24_video_wide": (ANCHOR + "wide shot: a white outdoor editing suite structure with a large glowing timeline ribbon flowing through it like a river across the meadow", "16:9"),
-    "g25_doc_wide": (ANCHOR + "wide shot: giant glowing manuscript pages on a white drying line across a green valley, a white press machine in the foreground", "16:9"),
-    "g26_launch_wide": (ANCHOR + "wide shot: a white storefront kiosk at the center of a meadow crossroads, white paths radiating outward, small glowing envelope cards traveling the paths", "16:9"),
-    "g27_social_wide": (ANCHOR + "wide shot: a month-long calendar boardwalk of glowing tiles winding over green hills, a small white robot placing the next tile", "16:9"),
-    "g28_research_wide": (ANCHOR + "wide shot: a long white ledger table across a hillside covered in glowing catalog cards, a lens apparatus on rails inspecting them, some cards sealed with green checks", "16:9"),
-    "g29_deck_wide": (ANCHOR + "wide shot: a gallery row of white easels on a lawn each holding a glowing slide, one central easel spotlit by dawn light", "16:9"),
-    "g30_favicon_mark": ("minimal 3D render: a single pristine white square tile with three stacked horizontal glowing bars embossed on it, offset like layered rails, soft studio light on light gray background, centered, no text", "1:1"),
+    "hf2d_41_website": (ANCHOR + "square: friendly robotic arms on a small platform composing a website screen from typography blocks and image tiles", "1:1"),
+    "hf2d_42_video": (ANCHOR + "square: glowing film-frame cards riding a small conveyor loop toward a cute projector head", "1:1"),
+    "hf2d_43_deck": (ANCHOR + "square: a neat fan of presentation slides held by a little mechanical easel", "1:1"),
+    "hf2d_44_document": (ANCHOR + "square: a small typesetting press pressing a glowing page, finished pages stacked beside it", "1:1"),
+    "hf2d_45_research": (ANCHOR + "square: a telescope aimed at a floating constellation of small catalog cards", "1:1"),
+    "hf2d_46_launch": (ANCHOR + "square: a small storefront kiosk with a striped awning being assembled by two robotic arms", "1:1"),
+    "hf2d_47_social": (ANCHOR + "square: a tilted calendar grid of thirty small colorful tiles, a tiny robot polishing one", "1:1"),
+    "hf2d_48_compete": (ANCHOR + "square: a lighthouse on a small rise sweeping its beam over terraced platforms holding miniature rival buildings", "1:1"),
+    "hf2d_53_aivideo": (ANCHOR + "square: a film clapperboard surrounded by four small video frames materializing from sparkle particles", "1:1"),
+    "hf2d_54_icp": (ANCHOR + "square: concentric target rings with a magnifying glass highlighting one segment of a crowd of abstract profile cards", "1:1"),
+    "hf2d_49_model": (ANCHOR + "4:3: a single friendly compute core with cooling fins on a soft hill, small clouds", "4:3"),
+    "hf2d_50_credits": (ANCHOR + "4:3: golden coins cascading from a little cloud through glass pipes into a collection machine", "4:3"),
+    "hf2d_51_skills": (ANCHOR + "4:3: a cheerful robot librarian filing a glowing card into a tall organized card rack", "4:3"),
+    "hf2d_52_fork": (ANCHOR + "wide: one conveyor belt splitting into eight smaller belts, each ending at a differently colored small pavilion, packages riding the belts", "3:2"),
+    "hf2d_55_assembly": (ANCHOR + "wide: robotic arms over an assembly line composing a website screen from typography blocks and image tiles", "3:2"),
+    "hf2d_56_loop": (ANCHOR + "wide: a circular conveyor refinement loop where screens pass a polishing station and emerge brighter, one exit ramp releasing a finished screen", "3:2"),
+    "hf2d_57_archive": (ANCHOR + "wide: colorful archive shelving holding catalogued blocks, one block pulled out glowing with a small red wax seal", "3:2"),
+    "hf2d_58_credits": (ANCHOR + "wide: golden coins cascading from a cloud through pastel glass pipes into a collection vault on a meadow", "3:2"),
 }
 
 
@@ -85,8 +71,7 @@ def gen(name, prompt, ar, token):
     for cand in data.get("candidates", []):
         for part in cand.get("content", {}).get("parts", []):
             if "inlineData" in part:
-                (OUT / f"{name}.png").write_bytes(
-                    base64.b64decode(part["inlineData"]["data"]))
+                (OUT / f"{name}.png").write_bytes(base64.b64decode(part["inlineData"]["data"]))
                 return True
     return False
 
@@ -94,26 +79,20 @@ def gen(name, prompt, ar, token):
 def main():
     token = get_token()
     items = list(PROMPTS.items())
-    done, failed = 0, []
+    failed = []
     for i, (name, (prompt, ar)) in enumerate(items):
-        if (OUT / f"{name}.png").exists():
-            done += 1
-            continue
         try:
             ok = gen(name, prompt, ar, token)
         except Exception as e:
             ok = False
             print(f"{name}: ERROR {e}", flush=True)
-        if ok:
-            done += 1
-            print(f"{name}: ok ({done}/{len(items)})", flush=True)
-        else:
+        print(f"{name}: {'ok' if ok else 'FAIL'} ({i+1}/{len(items)})", flush=True)
+        if not ok:
             failed.append(name)
         if i % 2 == 1:
             time.sleep(25)
-        if i % 10 == 9:  # refresh token occasionally
+        if i % 8 == 7:
             token = get_token()
-    # one retry pass for stragglers, singles with pacing
     for name in list(failed):
         time.sleep(25)
         try:

@@ -33,7 +33,7 @@ The real value of this product is analyzing the whole market: the latest and gre
 - Remotion: hooks (useCurrentFrame etc.) must be called before any early return in a component or rendering dies with React #310 at random frames.
 
 ## Art direction (Praj, 2026-08-13, evening)
-- 2D flat illustrations (emerald/cream, Higgsfield nano_banana_pro) for CARD images; 3D-rendered-elements stills for BACKGROUNDS only; motion is CODE-DRIVEN like FintechX (probed: no videos, no CSS anims, Framer-Motion JS transforms) — parallax, glide chips on offset-path, marquee, floating terminal. Baked AI ambient videos of landscapes = rejected. ONLY Higgsfield for generation from here on out (overrides the global Gemini rule for this workstream).
+- 2D flat illustrations for CARD images in a BLUE-LEANING PASTEL palette (Praj 2026-08-13 evening: powder blue/periwinkle leads, mint/blush/butter accents, warm off-white ground; "pastel is a texture", the first all-green set was rejected). 3D-rendered-elements stills for BACKGROUNDS only; motion is CODE-DRIVEN like FintechX (probed: no videos, no CSS anims, Framer-Motion JS transforms) — parallax, glide chips on offset-path, marquee, floating terminal. Baked AI ambient videos of landscapes = rejected. Generation stack: Higgsfield by default, Gemini ADC fine when Praj calls for it (he did for the pastel regen).
 - Site is 3 pages: index.html (single-scroll marketing, FintechX-copied), harnesses.html (explorer: 2 tabs + search), resources.html ($300 Gemini ADC guide). build_site.py regenerates from harnesses.json + registry.json, then the webp-optimize snippet rewrites refs (rerun BOTH after data edits).
 
 ## Where we left off
