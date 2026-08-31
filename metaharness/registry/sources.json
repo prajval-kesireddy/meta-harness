@@ -1,0 +1,169 @@
+{
+  "_about": "Canonical source registry: WHERE metaharness looks for the best agent tools. Single source of truth for BOTH the daily scanner (research_update.py) and the public site (build_site.py), so every backend change surfaces on the site automatically. method=github/hackernews/mcp-registry/npm sources are swept live by the scanner; method=reference/community are curated sources reported with their logo (and, for community, pulled at compose-time via agent-reach). Cross-source corroboration — a tool surfacing in more than one source — is the ranking signal no other directory computes.",
+  "updated": "2026-08-13",
+  "sources": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "logo": "github.svg",
+      "url": "https://github.com/search?q=claude-skills&type=repositories",
+      "category": "code",
+      "role": "primary corpus",
+      "contributes": "Every skill, MCP server, agent pack and harness ships as a repo. We sweep topics, full-text search, and star velocity — the raw material of the index.",
+      "signal": "stars + push recency",
+      "scan": {
+        "method": "github",
+        "queries": [
+          "topic:claude-skills",
+          "topic:claude-code",
+          "topic:mcp-server stars:>50",
+          "topic:agent-skills",
+          "claude-code in:name,description,topics stars:>100",
+          "\"agent skills\" in:name,description stars:>100",
+          "\"agent harness\" in:name,description,readme stars:>30",
+          "mcp server in:name,description stars:>80"
+        ]
+      }
+    },
+    {
+      "id": "hackernews",
+      "name": "Hacker News",
+      "logo": "ycombinator.svg",
+      "url": "https://hn.algolia.com/?query=claude%20code&type=story",
+      "category": "signal",
+      "role": "what's breaking out",
+      "contributes": "The front-page signal: which agent tools practitioners are actually discussing this week, ranked by points. Catches launches before they trend on GitHub.",
+      "signal": "story points",
+      "scan": {
+        "method": "hackernews",
+        "queries": ["claude code skill", "MCP server", "agent skills", "claude code agent", "AI coding agent harness"],
+        "min_points": 20
+      }
+    },
+    {
+      "id": "mcp-registry",
+      "name": "MCP Registry",
+      "logo": "modelcontextprotocol.svg",
+      "url": "https://registry.modelcontextprotocol.io",
+      "category": "registry",
+      "role": "official MCP index",
+      "contributes": "The official Model Context Protocol registry: newly published MCP servers straight from the canonical source, before third-party directories mirror them.",
+      "signal": "freshly published",
+      "scan": {"method": "mcp-registry", "limit": 50}
+    },
+    {
+      "id": "npm",
+      "name": "npm",
+      "logo": "npm.svg",
+      "url": "https://www.npmjs.com/search?q=claude%20skill",
+      "category": "registry",
+      "role": "install rail",
+      "contributes": "Most skills and MCP servers ship as npm packages; weekly download counts are a hard usage signal that stars cannot fake.",
+      "signal": "weekly downloads",
+      "scan": {
+        "method": "npm",
+        "queries": ["claude code skill", "mcp server", "claude agent skill", "model context protocol"],
+        "enrich_top": 8
+      }
+    },
+    {
+      "id": "skills-sh",
+      "name": "skills.sh",
+      "logo": "skills.png",
+      "url": "https://skills.sh",
+      "category": "leaderboard",
+      "role": "install leaderboard",
+      "contributes": "The agent-skills directory with real install-count leaderboards, refreshed daily. Popularity signal we rate on top of — installs measure marketing, our score measures outcomes.",
+      "signal": "install counts",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "glama",
+      "name": "Glama",
+      "logo": "glama.svg",
+      "url": "https://glama.ai/mcp/servers",
+      "category": "directory",
+      "role": "MCP directory",
+      "contributes": "One of the largest MCP server directories (20k+ servers) with quality and security metadata — a breadth net for the MCP lane.",
+      "signal": "directory breadth",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "pulsemcp",
+      "name": "PulseMCP",
+      "logo": "pulsemcp.png",
+      "url": "https://www.pulsemcp.com/servers",
+      "category": "directory",
+      "role": "MCP directory",
+      "contributes": "MCP server directory with a weekly newsletter tracking what is new and active — freshness on the MCP lane.",
+      "signal": "activity tracking",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "smithery",
+      "name": "Smithery",
+      "logo": "smithery.png",
+      "url": "https://smithery.ai",
+      "category": "directory",
+      "role": "MCP directory",
+      "contributes": "Curated MCP and workflow directory with one-command install and usage stats — vetted end-to-end automations.",
+      "signal": "curated + usage",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "producthunt",
+      "name": "Product Hunt",
+      "logo": "producthunt.svg",
+      "url": "https://www.producthunt.com/topics/developer-tools",
+      "category": "launch",
+      "role": "launch radar",
+      "contributes": "Where new AI dev tools launch and get their first upvote signal — catches commercial entrants the GitHub sweep misses.",
+      "signal": "launch upvotes",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "logo": "anthropic.svg",
+      "url": "https://github.com/anthropics/skills",
+      "category": "official",
+      "role": "first-party skills",
+      "contributes": "The platform's own skills (frontend-design, pptx, pdf, docx) and plugin marketplaces — highest-trust, lowest-noise, tracked first.",
+      "signal": "first-party",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "awesome-lists",
+      "name": "Awesome Lists",
+      "logo": "awesomelists.svg",
+      "url": "https://github.com/hesreallyhim/awesome-claude-code",
+      "category": "curated",
+      "role": "human curation",
+      "contributes": "Hand-vetted awesome-lists (awesome-claude-code, awesome-agent-skills) are the slow-but-trusted human filter we cross-check the automated sweep against.",
+      "signal": "human-vetted",
+      "scan": {"method": "reference"}
+    },
+    {
+      "id": "reddit",
+      "name": "Reddit",
+      "logo": "reddit.svg",
+      "url": "https://www.reddit.com/r/ClaudeAI/",
+      "category": "community",
+      "role": "practitioner sentiment",
+      "contributes": "r/ClaudeAI, r/ClaudeCode and r/mcp — where practitioners say what actually works and what quietly broke. Pulled at compose-time via agent-reach (Reddit blocks datacenter scraping).",
+      "signal": "community sentiment",
+      "scan": {"method": "community"}
+    },
+    {
+      "id": "x",
+      "name": "X",
+      "logo": "x.svg",
+      "url": "https://x.com/search?q=claude%20code%20skill&f=live",
+      "category": "community",
+      "role": "practitioner threads",
+      "contributes": "The practitioner threads where the winning stack COMBINATIONS surface first. Pulled at compose-time via agent-reach.",
+      "signal": "practitioner signal",
+      "scan": {"method": "community"}
+    }
+  ]
+}

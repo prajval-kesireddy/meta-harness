@@ -2,7 +2,9 @@
 
 Every metaharness-generated harness runs on the same operating system. The use-case file you're reading this from defines WHAT to build; this file defines HOW the agent works. Copy both into the project; the agent must follow both.
 
-## The four laws
+Two files make the operating system: **this file** is PROCESS (how the work loops and gets verified); **CLAUDE-CODE-DOCTRINE.md** is CONDUCT (how the agent writes code and communicates, distilled from the best coding agents). Follow both.
+
+## The five laws
 
 1. **Definition of done before work.** The first phase of every harness produces a concrete, checkable definition of done. No phase starts until its exit condition is written down. "Looks good" is not an exit condition; "all 9 checklist items pass on the live URL" is.
 
@@ -11,6 +13,8 @@ Every metaharness-generated harness runs on the same operating system. The use-c
 3. **Audit with a different instrument than you produced with.** Code gets audited by rendering it and looking at pixels. Prose gets audited by reading it aloud-in-head as the target reader. Claims get audited by trying to refute them. Never let the agent grade its own homework in the same modality it did the homework.
 
 4. **Verify before claiming done.** Every "it's finished" requires evidence gathered AFTER the last change: the actual screenshot, the actual render, the actual test output, the actual live URL fetched. A claim without post-change evidence is a lie the agent hasn't caught yet.
+
+5. **Live over remembered.** Never compose from trained-in defaults. The best skill, model, or tool for a stage is whatever the live registry and daily source scan say it is today, each carrying a last-verified date. A pick you can't trace to a live entry is a guess: label it one, or replace it. The moat is not knowing the tools, it's knowing which ones are winning THIS week.
 
 ## The loop library
 

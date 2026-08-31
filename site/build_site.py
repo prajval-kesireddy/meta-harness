@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Builds index.html + harnesses.html from live data (registry ratings +
-harness blueprints). Re-run after every registry or blueprint update.
-resources.html is static."""
+harness blueprints + sources). Re-run after every registry, blueprint or
+sources update; the webp rewrite is baked in. resources.html is static."""
 
 import json
+import re
 from datetime import date
 from pathlib import Path
 
@@ -36,6 +37,8 @@ LOGOS = {
     "firecrawl MCP": "firecrawl.png",
     "Gemini image gen (Vertex AI)": "googlegemini.svg",
     "Lighthouse CI": "lighthouse.svg",
+    "garrytan/gstack": "github.svg",
+    "affaan-m/ECC": "github.svg",
 }
 
 STAGE_TOOL_LOGOS = {
@@ -60,6 +63,34 @@ def stage_logos(stack):
             seen.add(logo)
             out.append(f'<img src="assets/logos/{logo}" alt="" title="{esc(stack)}">')
     return "".join(out[:3])
+
+
+LIVE_METHODS = {"github", "hackernews", "mcp-registry", "npm"}
+
+
+def build_source_tiles(sources):
+    """The Sources section: every source we index from, with its real logo and
+    what it contributes. Rendered from registry/sources.json so the site can
+    never claim a source the scanner doesn't actually read (or vice versa)."""
+    tiles = []
+    for s in sources:
+        live = s.get("scan", {}).get("method") in LIVE_METHODS
+        tag = "live scan" if live else s.get("category", "")
+        cls = " live" if live else ""
+        tiles.append(f"""
+      <div class="srctile reveal">
+        <div class="srctile-top"><img src="assets/logos/{s['logo']}" alt="{esc(s['name'])}" title="{esc(s['name'])}"><span class="srctile-tag{cls}">{esc(tag)}</span></div>
+        <div class="srctile-name">{esc(s['name'])}</div>
+        <p class="srctile-what">{esc(s['contributes'])}</p>
+      </div>""")
+    return "\n".join(tiles)
+
+
+def build_source_marquee(sources):
+    """A logo river of every source, duplicated for a seamless marquee."""
+    row = "".join(f'<img src="assets/logos/{s["logo"]}" alt="{esc(s["name"])}" title="{esc(s["name"])}">'
+                  for s in sources)
+    return row + row
 
 
 def build_index_rows(entries):
@@ -126,20 +157,45 @@ def main():
     registry = json.loads((MH / "registry" / "registry.json").read_text(encoding="utf-8"))
     harnesses = json.loads((MH / "harnesses.json").read_text(encoding="utf-8"))
     harnesses = {k: v for k, v in harnesses.items() if not k.startswith("_")}
+    sources = json.loads((MH / "registry" / "sources.json").read_text(encoding="utf-8"))["sources"]
+    live_n = sum(1 for s in sources if s.get("scan", {}).get("method") in LIVE_METHODS)
     tokens = {
         "{{HARNESS_CARDS}}": build_harness_cards(harnesses),
         "{{INDEX_ROWS}}": build_index_rows(registry["entries"]),
         "{{ENTRY_COUNT}}": str(len(registry["entries"])),
         "{{UPDATED}}": registry.get("updated", str(date.today())),
+        "{{SOURCE_TILES}}": build_source_tiles(sources),
+        "{{SOURCE_MARQUEE}}": build_source_marquee(sources),
+        "{{SOURCE_COUNT}}": str(len(sources)),
+        "{{LIVE_SOURCE_COUNT}}": str(live_n),
     }
+
+    # Bake the previously-manual webp rewrite into the build: any assets/img/*.png
+    # ref becomes .webp when that .webp exists on disk (the deployed PNGs are
+    # gitignored). One command now keeps the site in sync with the backend.
+    imgdir = HERE / "assets" / "img"
+    rewrites = [0]
+
+    def to_webp(html):
+        def repl(m):
+            rel = m.group(1)
+            name = rel.rsplit("/", 1)[-1]
+            if (imgdir / (name[:-4] + ".webp")).exists():
+                rewrites[0] += 1
+                return rel[:-4] + ".webp"
+            return rel
+        return re.sub(r"(assets/img/[A-Za-z0-9_\-]+\.png)", repl, html)
+
     for tpl, out in (("template_index.html", "index.html"),
                      ("template_tool.html", "harnesses.html")):
         html = (HERE / tpl).read_text(encoding="utf-8")
         for k, v in tokens.items():
             html = html.replace(k, v)
+        html = to_webp(html)
         (HERE / out).write_text(html, encoding="utf-8")
     print(f"Built index.html + harnesses.html: {len(harnesses)} harnesses, "
-          f"{len(registry['entries'])} index entries.")
+          f"{len(registry['entries'])} index entries, {len(sources)} sources "
+          f"({live_n} live), {rewrites[0]} webp refs rewritten.")
 
 
 if __name__ == "__main__":

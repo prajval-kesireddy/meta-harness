@@ -5,6 +5,8 @@ loops, and an honest estimate of what it costs in plan usage.
 
 Usage:
   python metaharness.py list
+  python metaharness.py validate
+  python metaharness.py sources
   python metaharness.py run <use-case> [--out DIR] [--plan pro|max5x|max20x]
                              [--answers FILE.json] [--yes]
   python metaharness.py registry [use-case]
@@ -44,14 +46,20 @@ def load_json(path):
 
 def load_harnesses():
     data = load_json(ROOT / "harnesses.json")
-    data.pop("_schema", None)
-    return data
+    return {k: v for k, v in data.items() if not k.startswith("_")}
 
 
 def load_registry():
     path = ROOT / "registry" / "registry.json"
     if path.exists():
         return load_json(path).get("entries", [])
+    return []
+
+
+def load_sources():
+    path = ROOT / "registry" / "sources.json"
+    if path.exists():
+        return load_json(path).get("sources", [])
     return []
 
 
@@ -157,7 +165,10 @@ TARGET_CLAUDE_MD = """# {title} project (metaharness)
 
 This project runs on a composed harness. Non-negotiables:
 
-1. Read HARNESS.md and PROCESS-CORE.md before any work, every session.
+1. Read HARNESS.md, PROCESS-CORE.md, and CLAUDE-CODE-DOCTRINE.md before any work,
+   every session. Conduct yourself by the doctrine: work like the best coding
+   agents (concise, convention-following, no unsolicited changes, evidence
+   before done).
 2. Follow the phase runbook in HARNESS.md in order; never skip a USER GATE.
 3. Every loop runs to its written exit condition; every "done" claim carries
    post-change evidence (screenshot, render, fetched URL, test output).
@@ -173,10 +184,12 @@ name: harness-os
 description: Use at the start of EVERY session in this project, and whenever unsure how to proceed, iterate, or verify. Loads the composed harness process (HARNESS.md + PROCESS-CORE.md) that governs all work here.
 ---
 
-Read HARNESS.md and PROCESS-CORE.md at the project root, then follow them
-exactly: current phase's runbook prompt, loop mechanics, exit conditions,
-verification-with-evidence before any completion claim. If context has grown
-long enough that these rules feel distant, re-read them before continuing.
+Read HARNESS.md, PROCESS-CORE.md, and CLAUDE-CODE-DOCTRINE.md at the project
+root, then follow them exactly: current phase's runbook prompt, loop mechanics,
+exit conditions, verification-with-evidence before any completion claim, and the
+doctrine's conduct rules (concise output, follow the codebase, no unsolicited
+changes). If context has grown long enough that these rules feel distant,
+re-read them before continuing.
 """
 
 
@@ -217,6 +230,9 @@ def compose(usecase, blueprint, answers, plan, out_dir):
     (out / "PROCESS-CORE.md").write_text(
         (ROOT / "templates" / "PROCESS-CORE.md").read_text(encoding="utf-8"),
         encoding="utf-8")
+    (out / "CLAUDE-CODE-DOCTRINE.md").write_text(
+        (ROOT / "templates" / "CLAUDE-CODE-DOCTRINE.md").read_text(encoding="utf-8"),
+        encoding="utf-8")
     (out / ".claude" / "CLAUDE.md").write_text(
         TARGET_CLAUDE_MD.format(title=blueprint["title"], today=date.today(),
                                 estimate_short=est_text.splitlines()[0]),
@@ -249,6 +265,92 @@ def compose(usecase, blueprint, answers, plan, out_dir):
     (out / "INSTALL.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     return est, est_text
+
+
+# ---------------------------------------------------------------- validation
+
+REQUIRED_Q = {"id", "prompt"}
+REQUIRED_STAGE = {"stage", "what", "stack", "model", "loop"}
+LIVE_METHODS = {"github", "hackernews", "mcp-registry", "npm"}
+
+
+def validate_data():
+    """Structural self-check of the engine's data files. Returns a list of
+    problems (empty == healthy). The engine refuses to pretend broken data is
+    fine: a bad blueprint fails loud here, not deep inside compose()."""
+    problems = []
+    try:
+        harnesses = load_harnesses()
+    except Exception as e:
+        return [f"harnesses.json: unparseable ({e})"]
+    if not harnesses:
+        problems.append("harnesses.json: no blueprints loaded")
+    for key, b in harnesses.items():
+        for field in ("title", "tagline", "quality_expectation",
+                      "base_agent_hours", "template", "questions", "pipeline"):
+            if field not in b:
+                problems.append(f"{key}: missing '{field}'")
+        if b.get("template") and not (ROOT / b["template"]).exists():
+            problems.append(f"{key}: template not found: {b['template']}")
+        for q in b.get("questions", []):
+            if not REQUIRED_Q <= set(q):
+                problems.append(f"{key}: question missing id/prompt near '{q.get('id', '?')}'")
+            if not q.get("freeform") and not q.get("options"):
+                problems.append(f"{key}: question '{q.get('id')}' has no options")
+            for o in q.get("options", []):
+                if "key" not in o or "label" not in o:
+                    problems.append(f"{key}/{q.get('id')}: option missing key/label")
+        for s in b.get("pipeline", []):
+            miss = REQUIRED_STAGE - set(s)
+            if miss:
+                problems.append(f"{key}: stage '{s.get('stage', '?')}' missing {sorted(miss)}")
+    for e in load_registry():
+        for field in ("name", "type", "score", "why", "source", "last_verified"):
+            if field not in e:
+                problems.append(f"registry '{e.get('name', '?')}': missing '{field}'")
+        if not isinstance(e.get("score"), int) or not 0 <= e.get("score", -1) <= 10:
+            problems.append(f"registry '{e.get('name', '?')}': score not an int 0-10")
+    logos = ROOT.parent / "site" / "assets" / "logos"
+    for s in load_sources():
+        for field in ("id", "name", "logo", "url", "contributes"):
+            if field not in s:
+                problems.append(f"source '{s.get('id', '?')}': missing '{field}'")
+        method = s.get("scan", {}).get("method")
+        if method and method not in LIVE_METHODS | {"reference", "community"}:
+            problems.append(f"source '{s.get('id')}': unknown scan method '{method}'")
+        if logos.exists() and s.get("logo") and not (logos / s["logo"]).exists():
+            problems.append(f"source '{s.get('id')}': logo file missing: {s['logo']}")
+    return problems
+
+
+def cmd_validate():
+    problems = validate_data()
+    if not problems:
+        print(f"OK: {len(load_harnesses())} blueprints, "
+              f"{len(load_registry())} registry entries, "
+              f"{len(load_sources())} sources — all structurally valid.")
+        return
+    print(f"{len(problems)} problem(s) found:")
+    for p in problems:
+        print(f"  - {p}")
+    raise SystemExit(1)
+
+
+def cmd_sources():
+    sources = load_sources()
+    if not sources:
+        print("  (no sources.json; the index has no declared provenance)")
+        return
+    live = [s for s in sources if s.get("scan", {}).get("method") in LIVE_METHODS]
+    ref = [s for s in sources if s.get("scan", {}).get("method") not in LIVE_METHODS]
+    print("Live-scanned sources (swept daily by registry/research_update.py):\n")
+    for s in live:
+        print(f"  {s['name']:15} [{s.get('signal', '')}]  {s['contributes']}")
+    print("\nCurated / community sources (reported with logos; pulled at compose-time):\n")
+    for s in ref:
+        print(f"  {s['name']:15} {s.get('role', ''):22} {s['url']}")
+    print(f"\n{len(sources)} sources total. Edit registry/sources.json; the public "
+          f"site regenerates from it via site/build_site.py, so the two never drift.")
 
 
 # ---------------------------------------------------------------- commands
@@ -289,9 +391,15 @@ def cmd_run(harnesses, args):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")  # em dashes on Windows consoles
+    except Exception:
+        pass
     p = argparse.ArgumentParser(prog="metaharness")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list")
+    sub.add_parser("validate")
+    sub.add_parser("sources")
     reg = sub.add_parser("registry")
     reg.add_argument("use_case", nargs="?")
     run = sub.add_parser("run")
@@ -306,6 +414,10 @@ def main():
     harnesses = load_harnesses()
     if args.cmd == "list":
         cmd_list(harnesses)
+    elif args.cmd == "validate":
+        cmd_validate()
+    elif args.cmd == "sources":
+        cmd_sources()
     elif args.cmd == "registry":
         cmd_registry(args.use_case)
     else:

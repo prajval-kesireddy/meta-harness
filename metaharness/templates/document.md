@@ -1,6 +1,6 @@
 # Document / PDF harness
 
-Read PROCESS-CORE.md first; it governs how every loop below runs.
+Read PROCESS-CORE.md and CLAUDE-CODE-DOCTRINE.md first: PROCESS-CORE governs how every loop below runs, the doctrine governs how you conduct yourself (concise, convention-following, no unsolicited changes, evidence before done).
 
 ## Your configuration
 
@@ -37,8 +37,18 @@ Paste:
 
 ### Phase 3: Whole-document pass
 Paste:
-> Read the FULL document end to end as the defined reader. Audit: transitions between sections, repeated points, voice drift from the anchor, front-loading (does the reader get the payoff early?). Fix the top issues, re-read the affected joins.
+> Read the FULL document end to end as the defined reader. Audit against the prose & typeset checklist below (transitions, repetition, voice drift from the anchor, front-loading). Fix the top issues, re-read the affected joins.
 
 ### Phase 4: Typeset and ship
 Paste:
 > Produce the final format per HARNESS.md config. For designed PDF: typeset via the HTML-to-PDF pipeline, then render every page to an image and audit (margins, orphans/widows, figure placement, heading breaks); fix and re-render to convergence. For docx: generate, then open-verify the actual file. Report done with rendered-page evidence per PROCESS-CORE.md.
+
+## Prose & typeset checklist
+
+1. Reads in the defined reader's voice from line one; matches VOICE.md, with no section-quality decay.
+2. De-slopped: no rule-of-three, no inflated abstractions, no vague attribution ("studies show"), no filler transitions.
+3. The payoff is front-loaded; the reader isn't made to earn the point.
+4. Every load-bearing claim traces to SOURCES.md; assumptions are labeled as assumptions.
+5. One clear structure: headings are informative and sections neither overlap nor repeat.
+6. Typeset output is clean: margins, no orphans or widows, figures placed, sane page and heading breaks.
+7. Opens correctly in the real target app with formatting intact.

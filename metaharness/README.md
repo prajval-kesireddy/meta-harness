@@ -1,15 +1,17 @@
 # metaharness
 
-Give your AI the intuition of the best in the world at any task.
+metaharness gives your AI the best skills and harnesses for what you're making — and tells it exactly how and when to use them.
 
-A layer sits between your prompt and great output: the harness. Which skills are installed, how the work loops, what gets verified before "done." The people getting jaw-dropping results from the same models you use have simply engineered that layer, and almost nobody else knows it exists. metaharness asks you two or three questions about the outcome you want, then composes that layer for you: the exact skills and tools worth installing (from a rated, daily-refreshed index of the whole ecosystem, never from stale defaults), the process runbook the best practitioners actually follow, the verification loops that catch slop before you see it, and an honest estimate of how much of your Claude plan's weekly usage the run will burn.
+Say the outcome first: website, video, deck, research, launch, social, docs. metaharness asks a short interview, then composes a harness with minimal skill installs (over-installing degrades agents), a staged runbook, the model mix per stage (Opus for taste, Sonnet for loops, Haiku for bulk where it fits), iteration loops, verification gates, and an honest estimate of how much of your Claude plan's weekly usage the run will burn.
 
 ## Quick start
 
 ```bash
-python metaharness.py list                 # see the 8 use cases
+python metaharness.py list                 # see the 10 use cases
 python metaharness.py run website          # interview -> composed harness
 python metaharness.py registry website     # rated tools for a use case
+python metaharness.py sources              # the sources behind the index
+python metaharness.py validate             # self-check every data file
 ```
 
 `run` writes a project folder containing:
@@ -26,11 +28,11 @@ Then: run INSTALL.md's commands, open Claude Code in the folder, paste the Phase
 
 ## Use cases (v1)
 
-website, video, pitch-deck, document, research, business-launch, social-content, competitive-analysis.
+website, video, ai-video-generation, pitch-deck, document, research, business-launch, social-content, icp-targeting, competitive-analysis.
 
 ## The index
 
-`registry/registry.json` is the moat: an editorially RATED index of the agent-tool ecosystem. Scores answer one question: does this measurably improve outcomes when composed into a harness? Install counts and star counts don't answer that, which is why every existing directory, at any size, still leaves you guessing. `registry/research_update.py` sweeps GitHub daily for new candidates and flags stale entries; nothing enters the registry unrated.
+`registry/registry.json` is an editorially rated index of the agent-tool ecosystem. Scores answer one question: does this measurably improve outcomes when composed into a harness? Install counts and star counts don't answer that. `registry/sources.json` declares every source the index reads (GitHub, Hacker News, the MCP registry, npm, plus curated directories), and `registry/research_update.py` sweeps the live ones daily, flags cross-source signals, and catches stale entries; nothing enters the registry unrated.
 
 ```bash
 python registry/research_update.py    # run a scan now

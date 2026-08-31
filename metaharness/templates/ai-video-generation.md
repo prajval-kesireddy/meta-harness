@@ -1,6 +1,6 @@
 # AI video generation harness
 
-Read PROCESS-CORE.md first; it governs how every loop below runs.
+Read PROCESS-CORE.md and CLAUDE-CODE-DOCTRINE.md first: PROCESS-CORE governs how every loop below runs, the doctrine governs how you conduct yourself (concise, convention-following, no unsolicited changes, evidence before done).
 
 ## Your configuration
 
@@ -39,8 +39,18 @@ Paste:
 
 ### Phase 3: Continuity audit
 Paste:
-> Extract a stills strip from all keepers and review as a set: style drift, character/product drift, lighting or time-of-day jumps. Regenerate offenders with tightened references. Cap 3 rounds; if a shot won't converge, recompose it rather than brute-forcing credits into it.
+> Extract a stills strip from all keepers and review as a set against the continuity checklist below (style drift, character/product drift, lighting or time-of-day jumps). Regenerate offenders with tightened references. Cap 3 rounds; if a shot won't converge, recompose it rather than brute-forcing credits into it.
 
 ### Phase 4: Assembly and finish
 Paste:
 > Cut the keepers, place music/VO (timing locks to audio), run one color-consistency pass over the assembled cut, export per platform. Verify per PROCESS-CORE.md: play the actual exports, spot-check sync, attach the stills strip and the final spend tally as evidence.
+
+## Continuity checklist
+
+1. One film: style, palette, and finish read identical across every shot (the anchor held).
+2. Characters and products are the SAME across shots: face, wardrobe, proportions, logo — no drift.
+3. Lighting and time-of-day stay consistent between adjacent shots unless the cut intends the change.
+4. Every kept shot traces to an approved anchor frame; no orphan generations in the cut.
+5. No uncanny tells left in frame (warping hands or faces, melting text, broken physics): offenders get recut, not shipped.
+6. Spend stayed within the preflighted budget; overages are logged with why.
+7. Exports are platform-correct and verified by playing the actual files.

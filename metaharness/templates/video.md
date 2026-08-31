@@ -1,6 +1,6 @@
 # Video harness
 
-Read PROCESS-CORE.md first; it governs how every loop below runs.
+Read PROCESS-CORE.md and CLAUDE-CODE-DOCTRINE.md first: PROCESS-CORE governs how every loop below runs, the doctrine governs how you conduct yourself (concise, convention-following, no unsolicited changes, evidence before done).
 
 ## Your configuration
 
@@ -35,7 +35,7 @@ Paste:
 
 ### Phase 2: The frame loop
 Paste:
-> Produce all beats. Then run the design loop adapted to video: extract stills at every beat boundary plus any text-heavy frame, audit each still (composition, legibility at phone size, brand consistency, continuity with neighbors), fix the top 3 issues, re-render affected beats. Repeat to convergence per PROCESS-CORE.md.
+> Produce all beats. Then run the design loop adapted to video: extract stills at every beat boundary plus any text-heavy frame, audit each still against the frame & cut checklist below, fix the top 3 issues, re-render affected beats. Repeat to convergence per PROCESS-CORE.md.
 
 ### Phase 3: Audio and pacing
 Paste:
@@ -44,3 +44,13 @@ Paste:
 ### Phase 4: Ship
 Paste:
 > Final render at target resolution + a phone-preview render. Verify per PROCESS-CORE.md: play the actual output file, check duration, audio sync at 3 spot points, first-3-seconds hook, and report with the file path and a stills strip as evidence.
+
+## Frame & cut checklist
+
+1. The hook lands in the first 2 seconds: a cold viewer has a reason to keep watching before anything is explained.
+2. Every text element is legible on a phone: size, contrast, and long enough on screen to read twice.
+3. Motion has intent; nothing animates just because it can. Hero moments don't ride default easing.
+4. Continuity holds shot to shot: color, style, and any recurring element stay consistent.
+5. Cuts land on the beat where audio exists; no shot overstays its purpose.
+6. Audio is level (-14 LUFS social target); VO and music never fight the point.
+7. The final file plays start to finish with synced audio at target resolution.

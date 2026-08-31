@@ -2,7 +2,7 @@
 
 (ICP = ideal customer profile: the specific kind of buyer your offer fits best.)
 
-Read PROCESS-CORE.md first; it governs how every loop below runs.
+Read PROCESS-CORE.md and CLAUDE-CODE-DOCTRINE.md first: PROCESS-CORE governs how every loop below runs, the doctrine governs how you conduct yourself (concise, convention-following, no unsolicited changes, evidence before done).
 
 ## Your configuration
 
