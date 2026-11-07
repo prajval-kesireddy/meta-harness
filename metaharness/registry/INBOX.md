@@ -1,4 +1,4 @@
-# Scan inbox: 2026-11-06
+# Scan inbox: 2026-11-07
 
 Ranked candidates from the daily multi-source sweep. Rate 0-10 (editorial: does it improve OUTCOMES in a composed harness?) and move keepers into registry.json, or strike a reject with one line why. Signal is cross-source: a ★ marks a tool that surfaced in more than one source, which is the strongest buy signal here.
 
@@ -7,48 +7,48 @@ Unique candidates: 173 · corroborated (>1 source): 2.
 
 ## Ranked candidates (cross-source signal)
 
-- [ ] **earendil-works/pi** — heat 107 ★ [github+npm] · ★ 120,482 · npm — Standalone Model Context Protocol client for pi and other applications — https://github.com/earendil-works/pi
-- [ ] **ChromeDevTools/chrome-devtools-mcp** — heat 101 ★ [github+npm] · ★ 54,881 · npm — Chrome DevTools for coding agents — https://github.com/ChromeDevTools/chrome-devtools-mcp
-- [ ] **morluto/rea** — heat 99 [github] · ★ 437,266 — Reverse engineer anything with agents, from app behavior down to native binaries. — https://github.com/morluto/rea
-- [ ] **openclaw/openclaw** — heat 98 [github] · ★ 394,045 — The AI that really does things. Any OS. Any Platform. The lobster way. 🦞  — https://github.com/openclaw/openclaw
-- [ ] **deepseek-ai/deepseek-harness** — heat 95 [github] · ★ 274,789 — DeepSeek Harness: Everything is a Plugin. — https://github.com/deepseek-ai/deepseek-harness
-- [ ] **NousResearch/hermes-agent** — heat 95 [github] · ★ 261,138 — The agent that grows with you — https://github.com/NousResearch/hermes-agent
-- [ ] **n8n-io/n8n** — heat 93 [github] · ★ 209,705 — Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations. — https://github.com/n8n-io/n8n
-- [ ] **ultraworkers/claw-code** — heat 93 [github] · ★ 194,948 — An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex — developed and maintained with no human intervention. — https://github.com/ultraworkers/claw-code
-- [ ] **avelino/awesome-go** — heat 93 [github] · ★ 192,399 — A curated list of awesome Go frameworks, libraries and software — https://github.com/avelino/awesome-go
-- [ ] **DietrichGebert/ponytail** — heat 92 [github] · ★ 185,733 — Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote. — https://github.com/DietrichGebert/ponytail
-- [ ] **open-webui/open-webui** — heat 91 [github] · ★ 157,934 — User-friendly AI Interface (Supports Ollama, OpenAI API, ...) — https://github.com/open-webui/open-webui
-- [ ] **anthropics/claude-code** — heat 91 [github] · ★ 154,784 — Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, ex — https://github.com/anthropics/claude-code
-- [ ] **farion1231/cc-switch** — heat 91 [github] · ★ 152,349 — A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io — https://github.com/farion1231/cc-switch
-- [ ] **nextlevelbuilder/ui-ux-pro-max-skill** — heat 91 [github] · ★ 146,091 — An AI skill that provides design intelligence for building professional UI/UX across multiple platforms. — https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
-- [ ] **Shubhamsaboo/awesome-llm-apps** — heat 90 [github] · ★ 144,026 — 100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source. — https://github.com/Shubhamsaboo/awesome-llm-apps
-- [ ] **Graphify-Labs/graphify** — heat 90 [github] · ★ 143,418 — Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex,  — https://github.com/Graphify-Labs/graphify
-- [ ] **JuliusBrussee/caveman** — heat 89 [github] · ★ 117,970 — 🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman. — https://github.com/JuliusBrussee/caveman
-- [ ] **stablyai/orca** — heat 89 [github] · ★ 117,623 — Orca lets you run a fleet of coding agents (e.g. Claude Code, Codex) with your own subscription. Available on desktop, mobile and remote runtime. — https://github.com/stablyai/orca
-- [ ] **thedotmack/claude-mem** — heat 89 [github] · ★ 113,905 — Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant — https://github.com/thedotmack/claude-mem
-- [ ] **addyosmani/agent-skills** — heat 89 [github] · ★ 113,688 — Production-grade engineering skills for AI coding agents. — https://github.com/addyosmani/agent-skills
-- [ ] **paperclipai/paperclip** — heat 89 [github] · ★ 111,695 — The open-source app everyone uses to manage agents at work — https://github.com/paperclipai/paperclip
-- [ ] **Leonxlnx/taste-skill** — heat 89 [github] · ★ 111,144 — Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages — https://github.com/Leonxlnx/taste-skill
-- [ ] **google-gemini/gemini-cli** — heat 88 [github] · ★ 108,752 — An open-source AI agent that brings the power of Gemini directly into your terminal. — https://github.com/google-gemini/gemini-cli
-- [ ] **nexu-io/open-design** — heat 88 [github] · ★ 106,289 — The 1st Collaborative AI Design Agent Workspace. Local-first and open source. Create motion, prototypes, websites, apps, dashboards, presentations, im — https://github.com/nexu-io/open-design
-- [ ] **pbakaus/impeccable** — heat 88 [github] · ★ 104,630 — The design vocabulary for your coding agent. Steer with polish and bolder, review with critique and audit, catch AI slop before it ships. — https://github.com/pbakaus/impeccable
-- [ ] **D4Vinci/Scrapling** — heat 88 [github] · ★ 98,744 — 🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EM — https://github.com/D4Vinci/Scrapling
-- [ ] **punkpeye/awesome-mcp-servers** — heat 88 [github] · ★ 97,378 — A collection of MCP servers. — https://github.com/punkpeye/awesome-mcp-servers
-- [ ] **tt-a1i/archify** — heat 87 [github] · ★ 94,154 — Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more. — https://github.com/tt-a1i/archify
-- [ ] **Egonex-AI/Understand-Anything** — heat 87 [github] · ★ 91,086 — Graphs that teach > graphs that impress. Turn any code into an interactive knowledge graph you can explore, search, and ask questions about. Works wit — https://github.com/Egonex-AI/Understand-Anything
-- [ ] **koala73/worldmonitor** — heat 87 [github] · ★ 90,273 — Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational aw — https://github.com/koala73/worldmonitor
+- [ ] **earendil-works/pi** — heat 107 ★ [github+npm] · ★ 120,617 · npm — Standalone Model Context Protocol client for pi and other applications — https://github.com/earendil-works/pi
+- [ ] **ChromeDevTools/chrome-devtools-mcp** — heat 101 ★ [github+npm] · ★ 54,929 · npm — Chrome DevTools for coding agents — https://github.com/ChromeDevTools/chrome-devtools-mcp
+- [ ] **morluto/rea** — heat 99 [github] · ★ 440,218 — Reverse engineer anything with agents, from app behavior down to native binaries. — https://github.com/morluto/rea
+- [ ] **openclaw/openclaw** — heat 98 [github] · ★ 394,117 — The AI that really does things. Any OS. Any Platform. The lobster way. 🦞  — https://github.com/openclaw/openclaw
+- [ ] **deepseek-ai/deepseek-harness** — heat 95 [github] · ★ 275,613 — DeepSeek Harness: Everything is a Plugin. — https://github.com/deepseek-ai/deepseek-harness
+- [ ] **NousResearch/hermes-agent** — heat 95 [github] · ★ 261,420 — The agent that grows with you — https://github.com/NousResearch/hermes-agent
+- [ ] **n8n-io/n8n** — heat 93 [github] · ★ 209,760 — Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations. — https://github.com/n8n-io/n8n
+- [ ] **ultraworkers/claw-code** — heat 93 [github] · ★ 194,941 — An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex — developed and maintained with no human intervention. — https://github.com/ultraworkers/claw-code
+- [ ] **avelino/awesome-go** — heat 93 [github] · ★ 192,576 — A curated list of awesome Go frameworks, libraries and software — https://github.com/avelino/awesome-go
+- [ ] **DietrichGebert/ponytail** — heat 92 [github] · ★ 186,231 — Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote. — https://github.com/DietrichGebert/ponytail
+- [ ] **open-webui/open-webui** — heat 91 [github] · ★ 158,018 — User-friendly AI Interface (Supports Ollama, OpenAI API, ...) — https://github.com/open-webui/open-webui
+- [ ] **anthropics/claude-code** — heat 91 [github] · ★ 154,893 — Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, ex — https://github.com/anthropics/claude-code
+- [ ] **farion1231/cc-switch** — heat 91 [github] · ★ 152,574 — A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io — https://github.com/farion1231/cc-switch
+- [ ] **nextlevelbuilder/ui-ux-pro-max-skill** — heat 91 [github] · ★ 146,459 — An AI skill that provides design intelligence for building professional UI/UX across multiple platforms. — https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+- [ ] **Shubhamsaboo/awesome-llm-apps** — heat 91 [github] · ★ 144,098 — 100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source. — https://github.com/Shubhamsaboo/awesome-llm-apps
+- [ ] **Graphify-Labs/graphify** — heat 90 [github] · ★ 143,862 — Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex,  — https://github.com/Graphify-Labs/graphify
+- [ ] **stablyai/orca** — heat 89 [github] · ★ 118,412 — Orca lets you run a fleet of coding agents (e.g. Claude Code, Codex) with your own subscription. Available on desktop, mobile and remote runtime. — https://github.com/stablyai/orca
+- [ ] **JuliusBrussee/caveman** — heat 89 [github] · ★ 118,128 — 🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman. — https://github.com/JuliusBrussee/caveman
+- [ ] **thedotmack/claude-mem** — heat 89 [github] · ★ 114,334 — Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant — https://github.com/thedotmack/claude-mem
+- [ ] **addyosmani/agent-skills** — heat 89 [github] · ★ 113,854 — Production-grade engineering skills for AI coding agents. — https://github.com/addyosmani/agent-skills
+- [ ] **paperclipai/paperclip** — heat 89 [github] · ★ 111,935 — The open-source app everyone uses to manage agents at work — https://github.com/paperclipai/paperclip
+- [ ] **Leonxlnx/taste-skill** — heat 89 [github] · ★ 111,513 — Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages — https://github.com/Leonxlnx/taste-skill
+- [ ] **google-gemini/gemini-cli** — heat 88 [github] · ★ 108,765 — An open-source AI agent that brings the power of Gemini directly into your terminal. — https://github.com/google-gemini/gemini-cli
+- [ ] **nexu-io/open-design** — heat 88 [github] · ★ 106,445 — The 1st Collaborative AI Design Agent Workspace. Local-first and open source. Create motion, prototypes, websites, apps, dashboards, presentations, im — https://github.com/nexu-io/open-design
+- [ ] **pbakaus/impeccable** — heat 88 [github] · ★ 105,309 — The design vocabulary for your coding agent. Steer with polish and bolder, review with critique and audit, catch AI slop before it ships. — https://github.com/pbakaus/impeccable
+- [ ] **D4Vinci/Scrapling** — heat 88 [github] · ★ 99,175 — 🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EM — https://github.com/D4Vinci/Scrapling
+- [ ] **punkpeye/awesome-mcp-servers** — heat 88 [github] · ★ 97,425 — A collection of MCP servers. — https://github.com/punkpeye/awesome-mcp-servers
+- [ ] **tt-a1i/archify** — heat 87 [github] · ★ 94,398 — Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more. — https://github.com/tt-a1i/archify
+- [ ] **Egonex-AI/Understand-Anything** — heat 87 [github] · ★ 91,217 — Graphs that teach > graphs that impress. Turn any code into an interactive knowledge graph you can explore, search, and ask questions about. Works wit — https://github.com/Egonex-AI/Understand-Anything
+- [ ] **koala73/worldmonitor** — heat 87 [github] · ★ 90,311 — Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational aw — https://github.com/koala73/worldmonitor
 
 ## Lane: GitHub
-- [ ] earendil-works/pi (★ 120,482 · npm) — https://github.com/earendil-works/pi
-- [ ] ChromeDevTools/chrome-devtools-mcp (★ 54,881 · npm) — https://github.com/ChromeDevTools/chrome-devtools-mcp
-- [ ] morluto/rea (★ 437,266) — https://github.com/morluto/rea
-- [ ] openclaw/openclaw (★ 394,045) — https://github.com/openclaw/openclaw
-- [ ] deepseek-ai/deepseek-harness (★ 274,789) — https://github.com/deepseek-ai/deepseek-harness
-- [ ] NousResearch/hermes-agent (★ 261,138) — https://github.com/NousResearch/hermes-agent
-- [ ] n8n-io/n8n (★ 209,705) — https://github.com/n8n-io/n8n
-- [ ] ultraworkers/claw-code (★ 194,948) — https://github.com/ultraworkers/claw-code
-- [ ] avelino/awesome-go (★ 192,399) — https://github.com/avelino/awesome-go
-- [ ] DietrichGebert/ponytail (★ 185,733) — https://github.com/DietrichGebert/ponytail
+- [ ] earendil-works/pi (★ 120,617 · npm) — https://github.com/earendil-works/pi
+- [ ] ChromeDevTools/chrome-devtools-mcp (★ 54,929 · npm) — https://github.com/ChromeDevTools/chrome-devtools-mcp
+- [ ] morluto/rea (★ 440,218) — https://github.com/morluto/rea
+- [ ] openclaw/openclaw (★ 394,117) — https://github.com/openclaw/openclaw
+- [ ] deepseek-ai/deepseek-harness (★ 275,613) — https://github.com/deepseek-ai/deepseek-harness
+- [ ] NousResearch/hermes-agent (★ 261,420) — https://github.com/NousResearch/hermes-agent
+- [ ] n8n-io/n8n (★ 209,760) — https://github.com/n8n-io/n8n
+- [ ] ultraworkers/claw-code (★ 194,941) — https://github.com/ultraworkers/claw-code
+- [ ] avelino/awesome-go (★ 192,576) — https://github.com/avelino/awesome-go
+- [ ] DietrichGebert/ponytail (★ 186,231) — https://github.com/DietrichGebert/ponytail
 
 ## Lane: Hacker News
 - [ ] DeepClaude – Claude Code agent loop with DeepSeek V4 Pro (HN 678) — https://github.com/aattaran/deepclaude
@@ -74,16 +74,16 @@ Unique candidates: 173 · corroborated (>1 source): 2.
 - [ ] agency.goji/goji (new) — https://github.com/goji-agency/goji-mcp
 
 ## Lane: npm
-- [ ] earendil-works/pi (★ 120,482 · npm) — https://github.com/earendil-works/pi
-- [ ] ChromeDevTools/chrome-devtools-mcp (★ 54,881 · npm) — https://github.com/ChromeDevTools/chrome-devtools-mcp
-- [ ] react-isokit (npm 70,428) — git+https://github.com/aadilghani1/isokit.git
-- [ ] fritzkit (npm 2,067) — git+https://github.com/pmaxhogan/fritzkit.git
-- [ ] @adobe/design-data-agent-mcp (npm 1,668) — git+https://github.com/adobe/spectrum-design-data.git
-- [ ] @intentsolutionsio/claude-pack (npm 761) — git+https://github.com/jeremylongshore/claude-code-plugins-plus-skills.git
-- [ ] @dsh-cc/skill-loader (npm 735) — git+https://github.com/dsh-cc/dsh-cc.git
-- [ ] hyper-animator (npm 229) — git+https://github.com/realpkuasule/hyper-animator-2.git
-- [ ] softr-vibe-coding (npm 226) — git+https://github.com/leo-softr/Softr-Vibe-Coding-Block-Claude-Skill.git
-- [ ] @neat.is/claude-skill (npm 170) — git+https://github.com/NEAT-Technologies/Neat.git
+- [ ] earendil-works/pi (★ 120,617 · npm) — https://github.com/earendil-works/pi
+- [ ] ChromeDevTools/chrome-devtools-mcp (★ 54,929 · npm) — https://github.com/ChromeDevTools/chrome-devtools-mcp
+- [ ] react-isokit (npm 83,044) — git+https://github.com/aadilghani1/isokit.git
+- [ ] fritzkit (npm 2,317) — git+https://github.com/pmaxhogan/fritzkit.git
+- [ ] @adobe/design-data-agent-mcp (npm 1,702) — git+https://github.com/adobe/spectrum-design-data.git
+- [ ] @intentsolutionsio/claude-pack (npm 857) — git+https://github.com/jeremylongshore/claude-code-plugins-plus-skills.git
+- [ ] @dsh-cc/skill-loader (npm 627) — git+https://github.com/dsh-cc/dsh-cc.git
+- [ ] softr-vibe-coding (npm 311) — git+https://github.com/leo-softr/Softr-Vibe-Coding-Block-Claude-Skill.git
+- [ ] hyper-animator (npm 225) — git+https://github.com/realpkuasule/hyper-animator-2.git
+- [ ] @neat.is/claude-skill (npm 191) — git+https://github.com/NEAT-Technologies/Neat.git
 
 ## Going stale (re-verify these still exist and ship)
 - [ ] anthropics/skills: frontend-design (last verified 2026-08-13)
